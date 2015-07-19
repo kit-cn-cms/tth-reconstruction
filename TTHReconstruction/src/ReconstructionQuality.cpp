@@ -14,6 +14,16 @@ ReconstructionQuality::ReconstructionQuality(string filename){
   h_M_TopHad_best=(TH1F*)file->Get("M_TopHad_best");
   h_M_TopLep_best=(TH1F*)file->Get("M_TopLep_best");
   h_M_WHad_best=(TH1F*)file->Get("M_WHad_best");
+  higgs_mean=111;
+  tophad_mean=165;
+  toplep_mean=168;
+  whad_mean=80;
+  higgs_sigma=17;
+  tophad_sigma=17;
+  toplep_sigma=26;
+  whad_sigma=10;
+  btagcut=0.89;
+  btagbonus=0.001;
 
 }
 
@@ -27,6 +37,11 @@ float ReconstructionQuality::GetTag(std::string tag, Interpretation& i){
   else if(tag=="TTChi2_tagged") return TTChi2_tagged(i);
   else if(tag=="TTWHChi2_tagged") return TTWHChi2_tagged(i);
   else if(tag=="TTWChi2_tagged") return TTWChi2_tagged(i);
+  else if(tag=="TTChi2_tagged_higgspt") return TTChi2_tagged_higgspt(i);
+  else if(tag=="TTChi2_tagged_higgsjetpt") return TTChi2_tagged_higgsjetpt(i);
+  else if(tag=="TTWChi2_tagged_higgspt") return TTWChi2_tagged_higgspt(i);
+  else if(tag=="TTWChi2_tagged_higgsjetpt") return TTWChi2_tagged_higgsjetpt(i);
+
   else{
     cout << "tag " << tag << " unknown!" << endl;
     return -1e20;
@@ -35,77 +50,112 @@ float ReconstructionQuality::GetTag(std::string tag, Interpretation& i){
 
 float ReconstructionQuality::TTHChi2(float mthad, float mtlep, float mhiggs){
   float chi2=0;
-  chi2+=(mthad-171)*(mthad-171)/(21*21);
-  chi2+=(mtlep-171)*(mtlep-171)/(27*27);
-  chi2+=(mhiggs-115)*(mhiggs-115)/(18*18);
+  chi2+=(mthad-tophad_mean)*(mthad-tophad_mean)/(tophad_sigma*tophad_sigma);
+  chi2+=(mtlep-toplep_mean)*(mtlep-toplep_mean)/(toplep_sigma*toplep_sigma);
+  chi2+=(mhiggs-higgs_mean)*(mhiggs-higgs_mean)/(higgs_sigma*higgs_sigma);
   return -chi2;
 }
 
 float ReconstructionQuality::TTChi2(float mthad, float mtlep){
   float chi2=0;
-  chi2+=(mthad-171)*(mthad-171)/(21*21);
-  chi2+=(mtlep-171)*(mtlep-171)/(27*27);
+  chi2+=(mthad-tophad_mean)*(mthad-tophad_mean)/(tophad_sigma*tophad_sigma);
+  chi2+=(mtlep-toplep_mean)*(mtlep-toplep_mean)/(toplep_sigma*toplep_sigma);
   return -chi2;
 }
 
 float ReconstructionQuality::TTWHChi2(float mthad, float mtlep, float mwhad, float mhiggs){
   float chi2=0;
-  chi2+=(mthad-171)*(mthad-171)/(21*21);
-  chi2+=(mtlep-171)*(mtlep-171)/(27*27);
-  chi2+=(mhiggs-115)*(mhiggs-115)/(18*18);
-  chi2+=(mwhad-83)*(mwhad-83)/(13*13);
+  chi2+=(mthad-tophad_mean)*(mthad-tophad_mean)/(tophad_sigma*tophad_sigma);
+  chi2+=(mtlep-toplep_mean)*(mtlep-toplep_mean)/(toplep_sigma*toplep_sigma);
+  chi2+=(mhiggs-higgs_mean)*(mhiggs-higgs_mean)/(higgs_sigma*higgs_sigma);
+  chi2+=(mwhad-whad_mean)*(mwhad-whad_mean)/(whad_sigma*whad_sigma);
   return -chi2;
 }
 
 float ReconstructionQuality::TTWChi2(float mthad, float mtlep, float mwhad){
   float chi2=0;
-  chi2+=(mthad-171)*(mthad-171)/(21*21);
-  chi2+=(mtlep-171)*(mtlep-171)/(27*27);
-  chi2+=(mwhad-83)*(mwhad-83)/(13*13);
+  chi2+=(mthad-tophad_mean)*(mthad-tophad_mean)/(tophad_sigma*tophad_sigma);
+  chi2+=(mtlep-toplep_mean)*(mtlep-toplep_mean)/(toplep_sigma*toplep_sigma);
+  chi2+=(mwhad-whad_mean)*(mwhad-whad_mean)/(whad_sigma*whad_sigma);
   return -chi2;
 }
 
 float ReconstructionQuality::TTHChi2_tagged(float mthad, float mtlep, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2){
   float chi2=TTHChi2(mthad, mtlep, mhiggs);
   int ntags=0;
-  if(tagblep>0.814) ntags++;
-  if(tagbhad>0.814) ntags++;
-  if(tagb1>0.814) ntags++;
-  if(tagb2>0.814) ntags++;
-  return chi2*pow(0.001,ntags);
+  if(tagblep>btagcut) ntags++;
+  if(tagbhad>btagcut) ntags++;
+  if(tagb1>btagcut) ntags++;
+  if(tagb2>btagcut) ntags++;
+  return chi2*pow(btagbonus,ntags);
 }
 
 float ReconstructionQuality::TTChi2_tagged(float mthad, float mtlep, float tagbhad, float tagblep, float tagb1, float tagb2){
   float chi2=TTChi2(mthad, mtlep);
   int ntags=0;
-  if(tagblep>0.814) ntags++;
-  if(tagbhad>0.814) ntags++;
-  if(tagb1>0.814) ntags++;
-  if(tagb2>0.814) ntags++;
-  return chi2*pow(0.001,ntags);
+  if(tagblep>btagcut) ntags++;
+  if(tagbhad>btagcut) ntags++;
+  if(tagb1>btagcut) ntags++;
+  if(tagb2>btagcut) ntags++;
+  return chi2*pow(btagbonus,ntags);
 }
 
 
 float ReconstructionQuality::TTWHChi2_tagged(float mthad, float mtlep, float mwhad, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2){
   float chi2=TTWHChi2(mthad, mtlep, mwhad, mhiggs);
   int ntags=0;
-  if(tagblep>0.814) ntags++;
-  if(tagbhad>0.814) ntags++;
-  if(tagb1>0.814) ntags++;
-  if(tagb2>0.814) ntags++;
-  return chi2*pow(0.001,ntags);
+  if(tagblep>btagcut) ntags++;
+  if(tagbhad>btagcut) ntags++;
+  if(tagb1>btagcut) ntags++;
+  if(tagb2>btagcut) ntags++;
+  return chi2*pow(btagbonus,ntags);
 }
 
 float ReconstructionQuality::TTWChi2_tagged(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1, float tagb2){
   float chi2=TTWChi2(mthad, mtlep, mwhad);
   int ntags=0;
-  if(tagblep>0.814) ntags++;
-  if(tagbhad>0.814) ntags++;
-  if(tagb1>0.814) ntags++;
-  if(tagb2>0.814) ntags++;
-  return chi2*pow(0.001,ntags);
+  if(tagblep>btagcut) ntags++;
+  if(tagbhad>btagcut) ntags++;
+  if(tagb1>btagcut) ntags++;
+  if(tagb2>btagcut) ntags++;
+  return chi2*pow(btagbonus,ntags);
 }
 
+float ReconstructionQuality::TTChi2_tagged_higgspt(float mthad, float mtlep, float tagbhad, float tagblep, float tagb1, float tagb2,float pt ){
+  return log(1+pt/100)*TTChi2_tagged(mthad,mtlep,tagbhad,tagblep,tagb1,tagb2);
+}
+float ReconstructionQuality::TTWChi2_tagged_higgspt(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1, float tagb2,float pt ){
+  return log(1+pt/100)*TTWChi2_tagged(mthad,mtlep,mwhad,tagbhad,tagblep,tagb1,tagb2);
+}
+float ReconstructionQuality::TTChi2_tagged_higgsjetpt(float mthad, float mtlep, float tagbhad, float tagblep, float tagb1, float tagb2, float pt1, float pt2){
+  return log(1+pt1*pt2/10000)*TTWChi2_tagged(mthad,mtlep,tagbhad,tagblep,tagb1,tagb2);
+}
+float ReconstructionQuality::TTWChi2_tagged_higgsjetpt(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1, float tagb2, float pt1, float pt2){
+  return log(1+pt1*pt2/10000)*TTWChi2_tagged(mthad,mtlep,mwhad,tagbhad,tagblep,tagb1,tagb2);
+}
+
+
+float ReconstructionQuality::TTChi2_tagged_higgspt(Interpretation& i){
+  float tag=TTChi2_tagged_higgspt(i.TopHad_M(),i.TopLep_M(),i.BHad_CSV(),i.BLep_CSV(),i.B1_CSV(),i.B2_CSV(),i.Higgs().Pt());
+  i.SetTag("TTChi2_tagged_higgspt",tag);
+  return tag;
+}
+float ReconstructionQuality::TTWChi2_tagged_higgspt(Interpretation& i){
+  float tag=TTWChi2_tagged_higgspt(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.BHad_CSV(),i.BLep_CSV(),i.B1_CSV(),i.B2_CSV(),i.Higgs().Pt());
+  i.SetTag("TTWChi2_tagged_higgspt",tag);
+  return tag;
+
+}
+float ReconstructionQuality::TTChi2_tagged_higgsjetpt(Interpretation& i){
+  float tag=TTChi2_tagged_higgsjetpt(i.TopHad_M(),i.TopLep_M(),i.BHad_CSV(),i.BLep_CSV(),i.B1_CSV(),i.B2_CSV(),i.B1().Pt(),i.B2().Pt());
+  i.SetTag("TTChi2_tagged_higgsjetpt",tag);
+  return tag;
+}
+float ReconstructionQuality::TTWChi2_tagged_higgsjetpt(Interpretation& i){
+  float tag=TTWChi2_tagged_higgsjetpt(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.BHad_CSV(),i.BLep_CSV(),i.B1_CSV(),i.B2_CSV(),i.B1().Pt(),i.B2().Pt());
+  i.SetTag("TTWChi2_tagged_higgsjetpt",tag);
+  return tag;
+}
 
 float ReconstructionQuality::TTHChi2_tagged(Interpretation& i){
   float tag=TTHChi2_tagged(i.TopHad_M(),i.TopLep_M(),i.Higgs_M(),i.BHad_CSV(),i.BLep_CSV(),i.B1_CSV(),i.B2_CSV());
@@ -118,7 +168,6 @@ float ReconstructionQuality::TTChi2_tagged(Interpretation& i, bool inclHiggsTags
   else tag=TTChi2_tagged(i.TopHad_M(),i.TopLep_M(),i.BHad_CSV(),i.BLep_CSV());
   i.SetTag("TTChi2_tagged",tag);
   return tag;
-
 }
 float ReconstructionQuality::TTWHChi2_tagged(Interpretation& i){
   float tag=TTWHChi2_tagged(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.Higgs_M(),i.BHad_CSV(),i.BLep_CSV(),i.B1_CSV(),i.B2_CSV());
@@ -131,7 +180,6 @@ float ReconstructionQuality::TTWChi2_tagged(Interpretation& i, bool inclHiggsTag
   else tag=TTWChi2_tagged(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.BHad_CSV(),i.BLep_CSV());
   i.SetTag("TTWChi2_tagged",tag);
   return tag;
-
 }
 
 float ReconstructionQuality::TTHChi2(Interpretation& i){

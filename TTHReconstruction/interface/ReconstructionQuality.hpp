@@ -23,6 +23,12 @@ public:
   float TTWHChi2_tagged(float mthad, float mtlep, float mwhad, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2);
   float TTWChi2_tagged(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99.);
 
+  float TTChi2_tagged_higgspt(float mthad, float mtlep, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99.,float pt =1.);
+  float TTWChi2_tagged_higgspt(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99.,float pt =1.);
+  float TTChi2_tagged_higgsjetpt(float mthad, float mtlep, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99., float p1=1, float pt2=1);
+  float TTWChi2_tagged_higgsjetpt(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99., float p1=1, float pt2=1);
+
+
   float GetTag(std::string tag, Interpretation& i);
 
   float TTHChi2(Interpretation& i);
@@ -34,6 +40,11 @@ public:
   float TTChi2_tagged(Interpretation& i, bool inclHiggsTags=true);
   float TTWHChi2_tagged(Interpretation& i);
   float TTWChi2_tagged(Interpretation& i, bool inclHiggsTags=true);
+
+  float TTChi2_tagged_higgspt(Interpretation& i);
+  float TTWChi2_tagged_higgspt(Interpretation& i);
+  float TTChi2_tagged_higgsjetpt(Interpretation& i);
+  float TTWChi2_tagged_higgsjetpt(Interpretation& i);
 
   float BLikelihood(float csv);
   float LLikelihood(float csv);
@@ -59,6 +70,18 @@ private:
   TH1F* h_M_TopLep_best;
   TH1F* h_M_WHad_best;
 
+  float higgs_mean;
+  float tophad_mean;
+  float toplep_mean;
+  float whad_mean;
+  float higgs_sigma;
+  float tophad_sigma;
+  float toplep_sigma;
+  float whad_sigma;
+  
+  float btagcut;
+
+  float btagbonus;
 };
 
 #endif
