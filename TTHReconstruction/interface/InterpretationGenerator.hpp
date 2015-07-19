@@ -8,7 +8,7 @@
 #include <algorithm>
 #include "Interpretation.hpp"
 #include "next_combination.h"
-namespace IntType{enum IntType{tth,tthfast,tt};};
+namespace IntType{enum IntType{tth,tt};};
 
 class InterpretationGenerator{
 public:

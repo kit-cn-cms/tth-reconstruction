@@ -16,7 +16,7 @@ std::vector<Interpretation*> InterpretationGenerator::GenerateTTHInterpretations
   // if the two neutrino solutions are very close let's use just one
   if(fabs(nuvec1.Pz()-nuvec2.Pz()<1)) nNu=1;
 
-  // some basic cuts on jets
+  // make some basic cuts on jets
   std::vector<TLorentzVector> jetvecs;
   std::vector<float> jetcsvs;
   // number of jets and tags actually used
@@ -31,7 +31,7 @@ std::vector<Interpretation*> InterpretationGenerator::GenerateTTHInterpretations
       jetcsvs.push_back(jetcsvs_in[i]);
     }
   }
-  // fill up until maxjets with untagged jets
+  // fill up until njets = maxjets with untagged jets
   for(uint i=0; njets<maxJets&&i<jetvecs_in.size(); i++){
     if(jetcsvs_in[i]<=btagCut){
       njets++;
@@ -44,25 +44,38 @@ std::vector<Interpretation*> InterpretationGenerator::GenerateTTHInterpretations
   for(int i=0;i<njets;i++){
     idxs[i]=i;
   }
-
+  // set number of jets that are used in permutations 
   int k=6;
+  // number of tags that are expected for interpreation (4 for tth)
   int expected_tags=4;
+  if(type==IntType::tt){
+    k=4;
+    expected_tags=2;
+  }
+  // if njets<k no interpretation is possible, njets<4 is not supported, too
+  if(njets<4||njets<k) return interpretations;
+  if(njets<6&&type==IntType::tth) return interpretations;
+
   // loop over neutrino solutions
   for(uint iNu=1; iNu<=nNu;iNu++){  
     // for all permutations of subsets with k jets  
     do{
       // skip uninteresting interpretations
       if(idxs[0]>idxs[1]) continue; // skip switched whad
-      if(idxs[4]>idxs[5]) continue; // skip switched higgs
+      if(njets>5 && idxs[4]>idxs[5]) continue; // skip switched higgs
       int iQ1=idxs[0];
       int iQ2=idxs[1];
       int iBHad=idxs[2];
       int iBLep=idxs[3];
-      int iB1=idxs[4];
-      int iB2=idxs[5];
+      int iB1=-1;
+      int iB2=-1;
+      if(njets>5){
+	iB1=idxs[4];
+	iB2=idxs[5];
+      }
       int tags_used=0;
-      if(jetcsvs[iB1]>btagCut) tags_used++;
-      if(jetcsvs[iB2]>btagCut) tags_used++;
+      if(iB1>-1&&jetcsvs[iB1]>btagCut) tags_used++;
+      if(iB2>-1&&jetcsvs[iB2]>btagCut) tags_used++;
       if(jetcsvs[iBHad]>btagCut) tags_used++;
       if(jetcsvs[iBLep]>btagCut) tags_used++;
       if(tags_used + allowedMistags < min(expected_tags,ntags) ){
@@ -72,16 +85,25 @@ std::vector<Interpretation*> InterpretationGenerator::GenerateTTHInterpretations
       if( (jetvecs[iQ1]+jetvecs[iQ2]).M()>maxMWHad || (jetvecs[iQ1]+jetvecs[iQ2]).M() < minMWHad) continue;
       
       // generate new interpretation
-      interpretations.push_back(new Interpretation(jetvecs[iBHad],jetcsvs[iBHad],
-						   jetvecs[iQ1],jetcsvs[iQ1],
-						   jetvecs[iQ2],jetcsvs[iQ2],
-						   jetvecs[iBLep],jetcsvs[iBLep],
-						   lepvec,iNu==1?nuvec1:nuvec2,
-						   jetvecs[iB1],jetcsvs[iB1],
-						   jetvecs[iB2],jetcsvs[iB2]));
+      if(type==IntType::tth){
+	interpretations.push_back(new Interpretation(jetvecs[iBHad],jetcsvs[iBHad],
+						     jetvecs[iQ1],jetcsvs[iQ1],
+						     jetvecs[iQ2],jetcsvs[iQ2],
+						     jetvecs[iBLep],jetcsvs[iBLep],
+						     lepvec,iNu==1?nuvec1:nuvec2,
+						     jetvecs[iB1],jetcsvs[iB1],
+						     jetvecs[iB2],jetcsvs[iB2]));
+      }
+      if(type==IntType::tt){
+	interpretations.push_back(new Interpretation(jetvecs[iBHad],jetcsvs[iBHad],
+						     jetvecs[iQ1],jetcsvs[iQ1],
+						     jetvecs[iQ2],jetcsvs[iQ2],
+						     jetvecs[iBLep],jetcsvs[iBLep],
+						     lepvec,iNu==1?nuvec1:nuvec2));
+      }
+
     }while(NextSubsetPermutation(idxs,k));
   }
-  //  cout << njets << " : "<<interpretations.size() << endl;
   return interpretations;
 }
 
