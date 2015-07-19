@@ -18,7 +18,7 @@ ReconstructionTester::ReconstructionTester(std::vector<std::string> tags_, strin
     InitHisto(tags[t],"TopLep_M_best",60,0,600);
     InitHisto(tags[t],"WHad_M_best",40,0,400);
   }
-
+  outfile=new TFile((outfilename+".root").c_str(),"RECREATE");        
   
 }
 ReconstructionTester::~ReconstructionTester(){
@@ -31,14 +31,28 @@ ReconstructionTester::~ReconstructionTester(){
     cout << "for tag " << tags[t] << ": found H " << foundH[tags[t]] << " / "  << nmatchH << " = " << (float)foundH[tags[t]]/nmatchH << endl;
     cout << "for tag " << tags[t] << ": found All " << foundAll[tags[t]] << " / "  << nmatchAll << " = " << (float)foundAll[tags[t]]/nmatchAll << endl;
   }
-
-  TFile* outfile=new TFile((outfilename+".root").c_str(),"RECREATE");    
-  outfile->cd();
+  cout << "writing histos" << endl;
+  TH1F* h_matches=new TH1F("matches","matches",5,0.5,5.5);
+  h_matches->GetXaxis()->SetBinLabel(1,"all");
+  h_matches->GetXaxis()->SetBinLabel(2,"higgs");
+  h_matches->GetXaxis()->SetBinLabel(3,"whad");
+  h_matches->GetXaxis()->SetBinLabel(4,"bhad");
+  h_matches->GetXaxis()->SetBinLabel(5,"blep");
+  h_matches->SetBinContent(1,nmatchAll);
+  h_matches->SetBinContent(2,nmatchH);
+  h_matches->SetBinContent(3,nmatchWhad);
+  h_matches->SetBinContent(4,nmatchBhad);
+  h_matches->SetBinContent(5,nmatchBlep);
+  h_matches->Write();
+  
   for(std::map<std::string,std::map<std::string,TH1F*> >::iterator t=allHistos.begin();t!=allHistos.end(); t++){
+    cout << "tag " << t->first << endl;
     for(std::map<std::string,TH1F*>::iterator h=t->second.begin();h!=t->second.end(); h++){
       h->second->Write();
     }
   }
+  outfile->Close();
+
   //  h_FoundQuarksChi2TTH->Scale(1./h_FoundQuarksChi2TTH->Integral());
   //  h_FoundQuarksChi2TTH->Write();
   //  h_FoundResonancesChi2TTH->Scale(1./h_FoundResonancesChi2TTH->Integral());

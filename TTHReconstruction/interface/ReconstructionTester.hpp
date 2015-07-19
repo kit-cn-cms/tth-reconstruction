@@ -23,7 +23,7 @@ public:
 private:
   std::vector<std::string> tags;
   std::string outfilename;
-    
+  TFile* outfile;
   ReconstructionMCMatching mcmatcher;
   ReconstructionQuality quality;
   InterpretationGenerator generator;
