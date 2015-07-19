@@ -45,13 +45,16 @@ void test(){
   
   TChain* chain = new TChain("MVATree");
   char* filenames = getenv ("FILENAMES");
+  cout << "filenames: " << filenames << endl;
   char* outfilename = getenv ("OUTFILENAME");
+  int maxevents = atoi(getenv ("MAXEVENTS"));
   string buf;
   stringstream ss(filenames); 
   while (ss >> buf){
+    cout << "adding " << buf.c_str() << "!" << endl;
     chain->Add(buf.c_str());
   }
-
+  //  chain->Add("/nfs/dust/cms/user/kelmorab/Spring15_Base13thJuly/addedTrees_nominal/ttHTobb_powheg_nominal.root");
   chain->SetBranchStatus("*",0);
 
   float Weight;
@@ -168,6 +171,9 @@ void test(){
   vector<string> tags;
   tags.push_back("TTWChi2_tagged");
   tags.push_back("TTWHChi2_tagged");
+  tags.push_back("TTWChi2_tagged_higgspt");
+  tags.push_back("TTWChi2_tagged_higgsjetpt");
+
   ReconstructionTester tester(tags);
 
   // loop
@@ -177,7 +183,8 @@ void test(){
   watch.Start();
   int nselected=0;
   for (long iEntry=0;iEntry<nentries;iEntry++) {
-    if(iEntry%1000==0){
+    if(maxevents>0&&iEntry>maxevents) break;
+    if(iEntry%10000==0||iEntry<100){
       cout << "analyzing event " << iEntry << endl;
       watch.Print();
       watch.Continue();
@@ -189,7 +196,7 @@ void test(){
     if(N_Jets<6||N_BTagsM<4||N_GenTopHad!=1||N_GenTopLep!=1||GenHiggs_Pt<0.1||GenHiggs_B1_Pt<0.1) continue;
     //    if(N_Jets!=4||N_BTagsM!=2||N_GenTopHad!=1||N_GenTopLep!=1||Evt_Pt_PrimaryLepton<30) continue;
     nselected++;
-    if(iEntry%1==0){
+    if(nselected%100==0){
       cout << "selected events " << nselected << endl;
     }
     TLorentzVector vHiggs_true=getLV(GenHiggs_Pt,GenHiggs_Eta,GenHiggs_Phi);
@@ -221,4 +228,5 @@ void test(){
 
 int main(){
   test();
+  return 0;
 }
