@@ -68,6 +68,9 @@ TLorentzVector Interpretation::Nu(){
 TLorentzVector Interpretation::TopHad(){
   return t_had;
 }
+TLorentzVector Interpretation::WHad(){
+  return w_had;
+}
 TLorentzVector Interpretation::TopLep(){
   return t_lep;
 }
