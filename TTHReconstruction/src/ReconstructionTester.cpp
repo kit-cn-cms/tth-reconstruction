@@ -17,6 +17,17 @@ ReconstructionTester::ReconstructionTester(std::vector<std::string> tags_, strin
     InitHisto(tags[t],"TopHad_M_best",60,0,600);
     InitHisto(tags[t],"TopLep_M_best",60,0,600);
     InitHisto(tags[t],"WHad_M_best",40,0,400);
+
+    InitHisto(tags[t],"Higgs_Eta_best",50,-2.5,2.5);
+    InitHisto(tags[t],"TopHad_Eta_best",50,-2.5,2.5);
+    InitHisto(tags[t],"TopLep_Eta_best",50,-2.5,2.5);
+    InitHisto(tags[t],"WHad_Eta_best",50,-2.5,2.5);
+
+    InitHisto(tags[t],"Higgs_Pt_best",40,0,400);
+    InitHisto(tags[t],"TopHad_Pt_best",60,0,600);
+    InitHisto(tags[t],"TopLep_Pt_best",60,0,600);
+    InitHisto(tags[t],"WHad_Pt_best",40,0,400);
+
   }
   outfile=new TFile((outfilename+".root").c_str(),"RECREATE");        
   
@@ -129,5 +140,14 @@ void ReconstructionTester::PlotInt(std::string tag, Interpretation* i, std::stri
   FillHisto(tag,"TopHad_M_"+suffix,i->TopHad_M());
   FillHisto(tag,"TopLep_M_"+suffix,i->TopLep_M());
   FillHisto(tag,"WHad_M_"+suffix,i->WHad_M());
+  
+  FillHisto(tag,"Higgs_Pt_"+suffix,i->Higgs().Pt());
+  FillHisto(tag,"TopHad_Pt_"+suffix,i->TopHad().Pt());
+  FillHisto(tag,"TopLep_Pt_"+suffix,i->TopLep().Pt());
+  FillHisto(tag,"WHad_Pt_"+suffix,i->WHad().Pt());
 
+  FillHisto(tag,"Higgs_Eta_"+suffix,i->Higgs().Eta());
+  FillHisto(tag,"TopHad_Eta_"+suffix,i->TopHad().Eta());
+  FillHisto(tag,"TopLep_Eta_"+suffix,i->TopLep().Eta());
+  FillHisto(tag,"WHad_Eta_"+suffix,i->WHad().Eta());
 }
