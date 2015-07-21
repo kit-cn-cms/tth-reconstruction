@@ -167,6 +167,18 @@ void test(){
   chain->SetBranchAddress("GenHiggs_B1_Phi",&GenHiggs_B1_Phi);
   float GenHiggs_B2_Phi;
   chain->SetBranchAddress("GenHiggs_B2_Phi",&GenHiggs_B2_Phi);
+  int N_AdditionalGenBJets;
+  chain->SetBranchAddress("N_AdditionalGenBJets",&N_AdditionalGenBJets);
+  float* AdditionalGenBJet_Pt = new float[20];
+  chain->SetBranchAddress("AdditionalGenBJet_Pt",AdditionalGenBJet_Pt);
+  float* AdditionalGenBJet_Eta = new float[20];
+  chain->SetBranchAddress("AdditionalGenBJet_Eta",AdditionalGenBJet_Eta);
+  float* AdditionalGenBJet_Phi = new float[20];
+  chain->SetBranchAddress("AdditionalGenBJet_Phi",AdditionalGenBJet_Phi);
+  float* AdditionalGenBJet_E = new float[20];
+  chain->SetBranchAddress("AdditionalGenBJet_E",AdditionalGenBJet_E);
+
+
   
   vector<string> tags;
   tags.push_back("TTWChi2_tagged");
@@ -193,8 +205,8 @@ void test(){
 
     chain->GetEntry(iEntry); 
     // selection
-    if(N_Jets<6||N_BTagsM<4||N_GenTopHad!=1||N_GenTopLep!=1||GenHiggs_Pt<0.1||GenHiggs_B1_Pt<0.1) continue;
-    //    if(N_Jets!=4||N_BTagsM!=2||N_GenTopHad!=1||N_GenTopLep!=1||Evt_Pt_PrimaryLepton<30) continue;
+    //    if(N_Jets<6||N_BTagsM<4||N_GenTopHad!=1||N_GenTopLep!=1||GenHiggs_Pt<0.1||GenHiggs_B1_Pt<0.1) continue;
+    if(N_Jets<6||N_BTagsM<4) continue;
     nselected++;
     if(nselected%100==0){
       cout << "selected events " << nselected << endl;
@@ -202,14 +214,24 @@ void test(){
     TLorentzVector vHiggs_true=getLV(GenHiggs_Pt,GenHiggs_Eta,GenHiggs_Phi);
     TLorentzVector vTopHad_true=getLV(GenTopHad_Pt[0],GenTopHad_Eta[0],GenTopHad_Phi[0]);
     TLorentzVector vTopLep_true=getLV(GenTopLep_Pt[0],GenTopLep_Eta[0],GenTopLep_Phi[0]);
-    TLorentzVector vB1_true=getLV(GenHiggs_B1_Pt,GenHiggs_B1_Eta,GenHiggs_B1_Phi);
-    TLorentzVector vB2_true=getLV(GenHiggs_B2_Pt,GenHiggs_B2_Eta,GenHiggs_B2_Phi);
     TLorentzVector vQ1_true=getLV(GenTopHad_Q1_Pt[0],GenTopHad_Q1_Eta[0],GenTopHad_Q1_Phi[0]);
     TLorentzVector vQ2_true=getLV(GenTopHad_Q2_Pt[0],GenTopHad_Q2_Eta[0],GenTopHad_Q2_Phi[0]);
     TLorentzVector vBHad_true=getLV(GenTopHad_B_Pt[0],GenTopHad_B_Eta[0],GenTopHad_B_Phi[0]);
     TLorentzVector vNu_true=getLV(GenTopLep_Nu_Pt[0],GenTopLep_Nu_Eta[0],GenTopLep_Nu_Phi[0]);
     TLorentzVector vLep_true=getLV(GenTopLep_Lep_Pt[0],GenTopLep_Lep_Eta[0],GenTopLep_Lep_Phi[0]);
     TLorentzVector vBLep_true=getLV(GenTopLep_B_Pt[0],GenTopLep_B_Eta[0],GenTopLep_B_Phi[0]);
+    TLorentzVector vB1_true;
+    TLorentzVector vB2_true;
+    if(GenHiggs_B1_Pt>0.1){
+      vB1_true=getLV(GenHiggs_B1_Pt,GenHiggs_B1_Eta,GenHiggs_B1_Phi);
+      vB2_true=getLV(GenHiggs_B2_Pt,GenHiggs_B2_Eta,GenHiggs_B2_Phi);
+    }
+    else if(N_AdditionalGenBJets>=2){
+      vB1_true=getLV(AdditionalGenBJet_Pt[0],AdditionalGenBJet_Eta[0],AdditionalGenBJet_Phi[0],AdditionalGenBJet_E[0]);
+      vB2_true=getLV(AdditionalGenBJet_Pt[1],AdditionalGenBJet_Eta[1],AdditionalGenBJet_Phi[1],AdditionalGenBJet_E[1]);
+    }
+    else continue;
+
 
     LVs jetvecs = getLVs(N_Jets,Jet_Pt,Jet_Eta,Jet_Phi,Jet_E);
     vector<float> jetcsvs;
