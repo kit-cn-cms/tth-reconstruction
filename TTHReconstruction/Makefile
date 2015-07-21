@@ -1,14 +1,9 @@
-CC= g++
-LD= g++
+CC=g++
+LD=g++
 
-ROOT_CFLAGS := $(shell root-config --cflags)
-ROOT_LDFLAGS := $(shell root-config --ldflags)
-ROOT_LIBS := $(shell root-config --libs) 
-ROOT_INCDIR := $(shell root-config --incdir) 
-
-INCLUDES = -I.. -I. -I./interface -I$(ROOT_INCDIR)
-CFLAGS = -c -fPIC $(ROOT_CFLAGS) -g
-LDFLAGS = $(ROOT_LDFLAGS) $(ROOT_LIBS)
+ROOTLIBS := $(shell root-config --libs) 
+ROOTC := $(shell root-config --cflags) 
+ROOTLD := $(shell root-config --ldflags)
 
 SOURCES:=$(wildcard src/*.cpp)
 OBJECTS:=$(patsubst src/%.cpp,tmp/%.o,$(SOURCES))
@@ -16,10 +11,10 @@ OBJECTS:=$(patsubst src/%.cpp,tmp/%.o,$(SOURCES))
 all : bin/test
 
 tmp/%.o : src/%.cpp
-	@echo creating $@ from $<; $(CC) $(CFLAGS) $(LDFLAGS) $(INCLUDES) -c -o $@ $<
+	$(CC) $(ROOTC) -fPIC -I./interface -c -o $@ $<
 
 bin/test : $(OBJECTS)
-	@echo creating $@ from $+; $(LD) $(LDFLAGS) $(INCLUDES) -o $@ $+
+	$(LD) $(ROOTLD) -o bin/test tmp/*o $(ROOTLIBS)
 
 clean :
 	rm -f tmp/*; rm -f bin/*
