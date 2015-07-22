@@ -45,16 +45,13 @@ void test(){
   
   TChain* chain = new TChain("MVATree");
   char* filenames = getenv ("FILENAMES");
-  cout << "filenames: " << filenames << endl;
   char* outfilename = getenv ("OUTFILENAME");
   int maxevents = atoi(getenv ("MAXEVENTS"));
   string buf;
   stringstream ss(filenames); 
   while (ss >> buf){
-    cout << "adding " << buf.c_str() << "!" << endl;
     chain->Add(buf.c_str());
   }
-  //  chain->Add("/nfs/dust/cms/user/kelmorab/Spring15_Base13thJuly/addedTrees_nominal/ttHTobb_powheg_nominal.root");
   chain->SetBranchStatus("*",0);
 
   float Weight;
@@ -186,7 +183,7 @@ void test(){
   tags.push_back("TTWChi2_tagged_higgspt");
   tags.push_back("TTWChi2_tagged_higgsjetpt");
 
-  ReconstructionTester tester(tags);
+  ReconstructionTester tester(tags,outfilename);
 
   // loop
   long nentries = chain->GetEntries(); 
@@ -205,8 +202,7 @@ void test(){
 
     chain->GetEntry(iEntry); 
     // selection
-    //    if(N_Jets<6||N_BTagsM<4||N_GenTopHad!=1||N_GenTopLep!=1||GenHiggs_Pt<0.1||GenHiggs_B1_Pt<0.1) continue;
-    if(N_Jets<6||N_BTagsM<4) continue;
+    if(N_Jets<6||N_BTagsM<4||N_GenTopHad!=1||N_GenTopLep!=1) continue;
     nselected++;
     if(nselected%100==0){
       cout << "selected events " << nselected << endl;
