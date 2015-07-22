@@ -140,3 +140,22 @@ bool ReconstructionMCMatching::MatchTTallQ(Interpretation& i){
   bool matchAll = MatchWHad(i)&&MatchBHad(i)&&MatchBLep(i);
   return matchAll;
 }
+
+float ReconstructionMCMatching::SumDrTTH(Interpretation& i){
+  if(setupMC<2){
+    cerr << "need to setup mc matching (incl Higgs) first!" << endl;
+    return false;
+  }
+  float sumDr=0;
+  sumDr+=b_had.DeltaR(i.BHad());
+  sumDr+=q1.DeltaR(i.Q1());
+  sumDr+=q2.DeltaR(i.Q2());
+  sumDr+=b_lep.DeltaR(i.BLep());
+  sumDr+=lep.DeltaR(i.Lep());
+  sumDr+=nu.DeltaR(i.Nu());
+  sumDr+=b1.DeltaR(i.B1());
+  sumDr+=b2.DeltaR(i.B1());
+
+  return sumDr;
+}
+

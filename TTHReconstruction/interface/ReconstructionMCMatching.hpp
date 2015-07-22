@@ -26,6 +26,7 @@ public:
   bool MatchBLep(Interpretation& i);
   bool MatchBHad(Interpretation& i);
   int MatchNTTH(Interpretation& i);
+  float SumDrTTH(Interpretation& i);
   int MatchNTTHResonances(Interpretation& i);
   
  
