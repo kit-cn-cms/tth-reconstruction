@@ -29,6 +29,21 @@ ReconstructionTester::ReconstructionTester(std::vector<std::string> tags_, strin
     InitHisto(tags[t],"WHad_Pt_best",40,0,400);
 
   }
+  InitHisto("mcmatch","Higgs_M_best",40,0,400);
+  InitHisto("mcmatch","TopHad_M_best",60,0,600);
+  InitHisto("mcmatch","TopLep_M_best",60,0,600);
+  InitHisto("mcmatch","WHad_M_best",40,0,400);
+  
+  InitHisto("mcmatch","Higgs_Eta_best",50,-2.5,2.5);
+  InitHisto("mcmatch","TopHad_Eta_best",50,-2.5,2.5);
+  InitHisto("mcmatch","TopLep_Eta_best",50,-2.5,2.5);
+  InitHisto("mcmatch","WHad_Eta_best",50,-2.5,2.5);
+  
+  InitHisto("mcmatch","Higgs_Pt_best",40,0,400);
+  InitHisto("mcmatch","TopHad_Pt_best",60,0,600);
+  InitHisto("mcmatch","TopLep_Pt_best",60,0,600);
+  InitHisto("mcmatch","WHad_Pt_best",40,0,400);
+
   outfile=new TFile((outfilename+".root").c_str(),"RECREATE");        
   
 }
@@ -86,6 +101,8 @@ void ReconstructionTester::Analyze(const std::vector<TLorentzVector>& jetvecs, c
   bool mcmatchWhad=false;
   bool mcmatchBhad=false;
   bool mcmatchBlep=false;
+  Interpretation* best_mcmatch_int=0;
+  float best_mcmatch=-1e12;
   for(uint t=0; t<tags.size(); t++){
     best_tag[tags[t]]=-1e12;
     best_int[tags[t]]=0;
@@ -96,7 +113,12 @@ void ReconstructionTester::Analyze(const std::vector<TLorentzVector>& jetvecs, c
     if(mcmatcher.MatchH(*(ints[i]))) mcmatchH=true;
     if(mcmatcher.MatchWHad(*(ints[i]))) mcmatchWhad=true;
     if(mcmatcher.MatchBHad(*(ints[i]))) mcmatchBhad=true;
-    if(mcmatcher.MatchBLep(*(ints[i]))) mcmatchBlep=true;   
+    if(mcmatcher.MatchBLep(*(ints[i]))) mcmatchBlep=true;
+    float sumDr=-mcmatcher.SumDrTTH(*(ints[i]));
+    if(sumDr>best_mcmatch){
+      best_mcmatch=sumDr;
+      best_mcmatch_int=ints[i];
+    }
     for(uint t=0; t<tags.size(); t++){
       float tag = quality.GetTag(tags[t],*(ints[i]));
       if(tag>best_tag[tags[t]]){
@@ -120,6 +142,10 @@ void ReconstructionTester::Analyze(const std::vector<TLorentzVector>& jetvecs, c
     }
     PlotInt(tags[t],best_int[tags[t]],"best");
   }
+  if(best_mcmatch_int!=0){
+    PlotInt("mcmatch",best_mcmatch_int,"best");
+  }
+
   for(uint i=0;i<ints.size();i++){
     delete ints[i];
   }
