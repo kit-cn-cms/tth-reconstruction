@@ -49,6 +49,7 @@ float ReconstructionQuality::GetTag(std::string tag, Interpretation& i){
   else if(tag=="TTWishLikelihood") return TTWishLikelihood(i);
   else if(tag=="TTWHishLikelihood_tagged") return TTWHishLikelihood_tagged(i);
   else if(tag=="TTWishLikelihood_tagged") return TTWishLikelihood_tagged(i);
+  else if(tag=="TTH_ME") return TTH_ME(i);
 
 
   else{
@@ -328,6 +329,12 @@ float ReconstructionQuality::TTWishLikelihood_tagged(Interpretation& i, bool inc
   if(inclHiggsTags) tag=TTWishLikelihood_tagged(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.BHad_CSV(),i.BLep_CSV(),i.B1_CSV(),i.B2_CSV());
   else tag=TTWishLikelihood_tagged(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.BHad_CSV(),i.BLep_CSV());
   i.SetTag("TTWishLikelihood_tagged",tag);
+  return tag;
+}
+
+float ReconstructionQuality::TTH_ME(Interpretation& i){
+  float tag=me.GetMEsq(i.TopHad(),i.TopLep(),i.Higgs());
+  i.SetTag("TTWHishLikelihood_tagged",tag);
   return tag;
 }
 

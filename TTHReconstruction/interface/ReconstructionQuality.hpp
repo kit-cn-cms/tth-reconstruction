@@ -77,6 +77,8 @@ public:
   float HiggsLikelihood(float m);
   float HiggsishLikelihood(float m);
 
+  float TTH_ME(Interpretation& i);
+
   float Interpolate(TH1F* histo, float value);
 
  
