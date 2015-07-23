@@ -10,39 +10,36 @@ ReconstructionTester::ReconstructionTester(std::vector<std::string> tags_, strin
   nmatchWhad=0;
   nmatchBhad=0;
   nmatchBlep=0;
-  for(uint t=0; t<tags.size(); t++){
-    foundH[tags[t]]=0;
-    foundAll[tags[t]]=0;
-    InitHisto(tags[t],"Higgs_M_best",40,0,400);
-    InitHisto(tags[t],"TopHad_M_best",60,0,600);
-    InitHisto(tags[t],"TopLep_M_best",60,0,600);
-    InitHisto(tags[t],"WHad_M_best",40,0,400);
+  vector<string> tags_plus=tags;
+  tags_plus.push_back("mcmatch");
+  tags_plus.push_back("perfect");
+  for(uint t=0; t<tags_plus.size(); t++){
+    foundH[tags_plus[t]]=0;
+    foundAll[tags_plus[t]]=0;
+    InitHisto(tags_plus[t],"Higgs_M_best",40,0,400);
+    InitHisto(tags_plus[t],"TopHad_M_best",60,0,600);
+    InitHisto(tags_plus[t],"TopLep_M_best",60,0,600);
+    InitHisto(tags_plus[t],"WHad_M_best",40,0,400);
 
-    InitHisto(tags[t],"Higgs_Eta_best",50,-2.5,2.5);
-    InitHisto(tags[t],"TopHad_Eta_best",50,-2.5,2.5);
-    InitHisto(tags[t],"TopLep_Eta_best",50,-2.5,2.5);
-    InitHisto(tags[t],"WHad_Eta_best",50,-2.5,2.5);
+    InitHisto(tags_plus[t],"Higgs_Eta_best",50,-2.5,2.5);
+    InitHisto(tags_plus[t],"TopHad_Eta_best",50,-2.5,2.5);
+    InitHisto(tags_plus[t],"TopLep_Eta_best",50,-2.5,2.5);
+    InitHisto(tags_plus[t],"WHad_Eta_best",50,-2.5,2.5);
 
-    InitHisto(tags[t],"Higgs_Pt_best",40,0,400);
-    InitHisto(tags[t],"TopHad_Pt_best",60,0,600);
-    InitHisto(tags[t],"TopLep_Pt_best",60,0,600);
-    InitHisto(tags[t],"WHad_Pt_best",40,0,400);
+    InitHisto(tags_plus[t],"Higgs_Pt_best",40,0,400);
+    InitHisto(tags_plus[t],"TopHad_Pt_best",60,0,600);
+    InitHisto(tags_plus[t],"TopLep_Pt_best",60,0,600);
+    InitHisto(tags_plus[t],"WHad_Pt_best",40,0,400);
 
+    InitHisto(tags_plus[t],"test_best",40,0,400);
+
+    InitHisto(tags_plus[t],"TTH_ME_best",100,-20,-6);
+    InitHisto(tags_plus[t],"TTWHChi2_best",60,0,15);
+    InitHisto(tags_plus[t],"TTWChi2_best",60,0,15);
+    InitHisto(tags_plus[t],"TTWLikelihood_best",100,-30,-5);
+    InitHisto(tags_plus[t],"TTWHLikelihood_best",100,-30,-5);
+    //    InitHisto(tags_plus[t],"asd",100,0,10);
   }
-  InitHisto("mcmatch","Higgs_M_best",40,0,400);
-  InitHisto("mcmatch","TopHad_M_best",60,0,600);
-  InitHisto("mcmatch","TopLep_M_best",60,0,600);
-  InitHisto("mcmatch","WHad_M_best",40,0,400);
-  
-  InitHisto("mcmatch","Higgs_Eta_best",50,-2.5,2.5);
-  InitHisto("mcmatch","TopHad_Eta_best",50,-2.5,2.5);
-  InitHisto("mcmatch","TopLep_Eta_best",50,-2.5,2.5);
-  InitHisto("mcmatch","WHad_Eta_best",50,-2.5,2.5);
-  
-  InitHisto("mcmatch","Higgs_Pt_best",40,0,400);
-  InitHisto("mcmatch","TopHad_Pt_best",60,0,600);
-  InitHisto("mcmatch","TopLep_Pt_best",60,0,600);
-  InitHisto("mcmatch","WHad_Pt_best",40,0,400);
 
   outfile=new TFile((outfilename+".root").c_str(),"RECREATE");        
   
@@ -145,6 +142,9 @@ void ReconstructionTester::Analyze(const std::vector<TLorentzVector>& jetvecs, c
   if(best_mcmatch_int!=0){
     PlotInt("mcmatch",best_mcmatch_int,"best");
   }
+  Interpretation* perfect_int=new Interpretation(vBHad_true,1,vQ1_true,0,vQ2_true,0, vBLep_true,1, 
+						 vLep_true, vNu_true, vB1_true,1, vB2_true,1);
+  PlotInt("perfect",perfect_int,"best");
 
   for(uint i=0;i<ints.size();i++){
     delete ints[i];
@@ -176,4 +176,15 @@ void ReconstructionTester::PlotInt(std::string tag, Interpretation* i, std::stri
   FillHisto(tag,"TopHad_Eta_"+suffix,i->TopHad().Eta());
   FillHisto(tag,"TopLep_Eta_"+suffix,i->TopLep().Eta());
   FillHisto(tag,"WHad_Eta_"+suffix,i->WHad().Eta());
+
+  FillHisto(tag,"test_"+suffix,1);
+  
+  FillHisto(tag,"TTH_ME_"+suffix,log(quality.TTH_ME(*i)));
+  FillHisto(tag,"TTWHChi2_"+suffix,-quality.TTWHChi2(*i));
+  FillHisto(tag,"TTWChi2_"+suffix,-quality.TTWChi2(*i));
+  FillHisto(tag,"TTWHLikelihood_"+suffix,log(quality.TTWHLikelihood(*i)));
+  FillHisto(tag,"TTWLikelihood_"+suffix,log(quality.TTWLikelihood(*i)));
+  //  FillHisto(tag,"asd_"+suffix,0);
+  
+   
 }
