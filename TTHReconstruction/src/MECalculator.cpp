@@ -2,14 +2,19 @@
 
 MECalculator::MECalculator(){
   process.initProc("data/param_card.dat");
-  test();
 }
 
 float MECalculator::test(){
   cout << "ME is " << GetMEsq(TLorentzVector(2.406089e+02,5.390753e+02,-2.747567e+02,6.737322e+02),TLorentzVector(-2.602682e+01,-4.937100e+02,1.510072e+02,5.451230e+02),TLorentzVector(-2.145821e+02,-4.536532e+01,1.237495e+02,2.811448e+02)) << endl;
 }
 
-float MECalculator::GetMEsq(const TLorentzVector & top, const TLorentzVector & topbar, const TLorentzVector & higgs){
+float MECalculator::GetMEsq(const TLorentzVector & top_in, const TLorentzVector & topbar_in, const TLorentzVector & higgs_in){
+  const float mtop=173.;
+  const float mh=125.;
+  TLorentzVector top(top_in.Px(),top_in.Py(),top_in.Pz(),sqrt(mtop*mtop+top_in.P()*top_in.P()));
+  TLorentzVector topbar(topbar_in.Px(),topbar_in.Py(),topbar_in.Pz(),sqrt(mtop*mtop+topbar_in.P()*topbar_in.P()));
+  TLorentzVector higgs(higgs_in.Px(),higgs_in.Py(),higgs_in.Pz(),sqrt(mh*mh+higgs_in.P()*higgs_in.P()));
+  
   double p4_g1[4];
   double p4_g2[4];
   double p4_top[4];
@@ -60,6 +65,5 @@ float MECalculator::GetMEsq(const TLorentzVector & top, const TLorentzVector & t
   const double* matrix_elements = process.getMatrixElements();
 
   assert(process.nprocesses==1);
-  
   return matrix_elements[0];
 }
