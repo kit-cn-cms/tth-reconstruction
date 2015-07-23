@@ -17,11 +17,19 @@ public:
   float TTChi2(float mthad, float mtlep);
   float TTWHChi2(float mthad, float mtlep, float mhiggs, float mwhad);
   float TTWChi2(float mthad, float mtlep, float mwhad);
+  float TTWHLikelihood(float mthad, float mtlep, float mhiggs, float mwhad);
+  float TTWLikelihood(float mthad, float mtlep, float mwhad);
+  float TTWHishLikelihood(float mthad, float mtlep, float mhiggs, float mwhad);
+  float TTWishLikelihood(float mthad, float mtlep, float mwhad);
 
   float TTHChi2_tagged(float mthad, float mtlep, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2);
   float TTChi2_tagged(float mthad, float mtlep, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99.);
   float TTWHChi2_tagged(float mthad, float mtlep, float mwhad, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2);
   float TTWChi2_tagged(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99.);
+  float TTWHLikelihood_tagged(float mthad, float mtlep, float mwhad, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2);
+  float TTWLikelihood_tagged(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99.);
+  float TTWHishLikelihood_tagged(float mthad, float mtlep, float mwhad, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2);
+  float TTWishLikelihood_tagged(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99.);
 
   float TTChi2_tagged_higgspt(float mthad, float mtlep, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99.,float pt =1.);
   float TTWChi2_tagged_higgspt(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99.,float pt =1.);
@@ -41,6 +49,16 @@ public:
   float TTWHChi2_tagged(Interpretation& i);
   float TTWChi2_tagged(Interpretation& i, bool inclHiggsTags=true);
 
+  float TTWHLikelihood(Interpretation& i);
+  float TTWLikelihood(Interpretation& i);
+  float TTWHLikelihood_tagged(Interpretation& i);
+  float TTWLikelihood_tagged(Interpretation& i, bool inclHiggsTags=true);
+
+  float TTWHishLikelihood(Interpretation& i);
+  float TTWishLikelihood(Interpretation& i);
+  float TTWHishLikelihood_tagged(Interpretation& i);
+  float TTWishLikelihood_tagged(Interpretation& i, bool inclHiggsTags=true);
+
   float TTChi2_tagged_higgspt(Interpretation& i);
   float TTWChi2_tagged_higgspt(Interpretation& i);
   float TTChi2_tagged_higgsjetpt(Interpretation& i);
@@ -55,6 +73,10 @@ public:
   float TopLepishLikelihood(float m);
   float WHadLikelihood(float m);
   float WHadishLikelihood(float m);
+  float HiggsLikelihood(float m);
+  float HiggsishLikelihood(float m);
+
+  float Interpolate(TH1F* histo, float value);
 
  
 private:
@@ -82,6 +104,7 @@ private:
   float btagcut;
 
   float btagbonus;
+  float tiny_likelihood;
 };
 
 #endif

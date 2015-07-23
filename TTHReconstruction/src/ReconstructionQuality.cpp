@@ -23,8 +23,8 @@ ReconstructionQuality::ReconstructionQuality(string filename){
   toplep_sigma=26;
   whad_sigma=10;
   btagcut=0.89;
-  btagbonus=0.001;
-
+  btagbonus=1000.;
+  tiny_likelihood=1e-3;
 }
 
 float ReconstructionQuality::GetTag(std::string tag, Interpretation& i){
@@ -41,6 +41,15 @@ float ReconstructionQuality::GetTag(std::string tag, Interpretation& i){
   else if(tag=="TTChi2_tagged_higgsjetpt") return TTChi2_tagged_higgsjetpt(i);
   else if(tag=="TTWChi2_tagged_higgspt") return TTWChi2_tagged_higgspt(i);
   else if(tag=="TTWChi2_tagged_higgsjetpt") return TTWChi2_tagged_higgsjetpt(i);
+  else if(tag=="TTWHLikelihood") return TTWHLikelihood(i);
+  else if(tag=="TTWLikelihood") return TTWLikelihood(i);
+  else if(tag=="TTWHLikelihood_tagged") return TTWHLikelihood_tagged(i);
+  else if(tag=="TTWLikelihood_tagged") return TTWLikelihood_tagged(i);
+  else if(tag=="TTWHishLikelihood") return TTWHishLikelihood(i);
+  else if(tag=="TTWishLikelihood") return TTWishLikelihood(i);
+  else if(tag=="TTWHishLikelihood_tagged") return TTWHishLikelihood_tagged(i);
+  else if(tag=="TTWishLikelihood_tagged") return TTWishLikelihood_tagged(i);
+
 
   else{
     cout << "tag " << tag << " unknown!" << endl;
@@ -79,6 +88,79 @@ float ReconstructionQuality::TTWChi2(float mthad, float mtlep, float mwhad){
   chi2+=(mwhad-whad_mean)*(mwhad-whad_mean)/(whad_sigma*whad_sigma);
   return -chi2;
 }
+float ReconstructionQuality::TTWHLikelihood(float mthad, float mtlep, float mwhad, float mhiggs){
+  float llh=1;
+  llh*=TopHadLikelihood(mthad);
+  llh*=TopLepLikelihood(mtlep);
+  llh*=WHadLikelihood(mwhad);
+  llh*=HiggsLikelihood(mhiggs);
+  return llh;
+}
+
+float ReconstructionQuality::TTWLikelihood(float mthad, float mtlep, float mwhad){
+  float llh=1;
+  llh*=TopHadLikelihood(mthad);
+  llh*=TopLepLikelihood(mtlep);
+  llh*=WHadLikelihood(mwhad);
+  return llh;
+}
+
+float ReconstructionQuality::TTWHLikelihood_tagged(float mthad, float mtlep, float mwhad, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2){
+  float llh=TTWHLikelihood(mthad, mtlep, mwhad, mhiggs);
+  int ntags=0;
+  if(tagblep>btagcut) ntags++;
+  if(tagbhad>btagcut) ntags++;
+  if(tagb1>btagcut) ntags++;
+  if(tagb2>btagcut) ntags++;
+  return llh*pow(btagbonus,ntags);
+}
+
+float ReconstructionQuality::TTWLikelihood_tagged(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1, float tagb2){
+  float llh=TTWLikelihood(mthad, mtlep, mwhad);
+  int ntags=0;
+  if(tagblep>btagcut) ntags++;
+  if(tagbhad>btagcut) ntags++;
+  if(tagb1>btagcut) ntags++;
+  if(tagb2>btagcut) ntags++;
+  return llh*pow(btagbonus,ntags);
+}
+float ReconstructionQuality::TTWHishLikelihood(float mthad, float mtlep, float mwhad, float mhiggs){
+  float llh=1;
+  llh*=TopHadishLikelihood(mthad);
+  llh*=TopLepishLikelihood(mtlep);
+  llh*=WHadishLikelihood(mwhad);
+  llh*=HiggsishLikelihood(mhiggs);
+  return llh;
+}
+
+float ReconstructionQuality::TTWishLikelihood(float mthad, float mtlep, float mwhad){
+  float llh=1;
+  llh*=TopHadishLikelihood(mthad);
+  llh*=TopLepishLikelihood(mtlep);
+  llh*=WHadishLikelihood(mwhad);
+  return llh;
+}
+
+float ReconstructionQuality::TTWHishLikelihood_tagged(float mthad, float mtlep, float mwhad, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2){
+  float llh=TTWHishLikelihood(mthad, mtlep, mwhad, mhiggs);
+  int ntags=0;
+  if(tagblep>btagcut) ntags++;
+  if(tagbhad>btagcut) ntags++;
+  if(tagb1>btagcut) ntags++;
+  if(tagb2>btagcut) ntags++;
+  return llh*pow(btagbonus,ntags);
+}
+
+float ReconstructionQuality::TTWishLikelihood_tagged(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1, float tagb2){
+  float llh=TTWishLikelihood(mthad, mtlep, mwhad);
+  int ntags=0;
+  if(tagblep>btagcut) ntags++;
+  if(tagbhad>btagcut) ntags++;
+  if(tagb1>btagcut) ntags++;
+  if(tagb2>btagcut) ntags++;
+  return llh*pow(btagbonus,ntags);
+}
+
 
 float ReconstructionQuality::TTHChi2_tagged(float mthad, float mtlep, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2){
   float chi2=TTHChi2(mthad, mtlep, mhiggs);
@@ -87,7 +169,7 @@ float ReconstructionQuality::TTHChi2_tagged(float mthad, float mtlep, float mhig
   if(tagbhad>btagcut) ntags++;
   if(tagb1>btagcut) ntags++;
   if(tagb2>btagcut) ntags++;
-  return chi2*pow(btagbonus,ntags);
+  return chi2*pow(1./btagbonus,ntags);
 }
 
 float ReconstructionQuality::TTChi2_tagged(float mthad, float mtlep, float tagbhad, float tagblep, float tagb1, float tagb2){
@@ -97,7 +179,7 @@ float ReconstructionQuality::TTChi2_tagged(float mthad, float mtlep, float tagbh
   if(tagbhad>btagcut) ntags++;
   if(tagb1>btagcut) ntags++;
   if(tagb2>btagcut) ntags++;
-  return chi2*pow(btagbonus,ntags);
+  return chi2*pow(1./btagbonus,ntags);
 }
 
 
@@ -108,7 +190,7 @@ float ReconstructionQuality::TTWHChi2_tagged(float mthad, float mtlep, float mwh
   if(tagbhad>btagcut) ntags++;
   if(tagb1>btagcut) ntags++;
   if(tagb2>btagcut) ntags++;
-  return chi2*pow(btagbonus,ntags);
+  return chi2*pow(1./btagbonus,ntags);
 }
 
 float ReconstructionQuality::TTWChi2_tagged(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1, float tagb2){
@@ -118,7 +200,7 @@ float ReconstructionQuality::TTWChi2_tagged(float mthad, float mtlep, float mwha
   if(tagbhad>btagcut) ntags++;
   if(tagb1>btagcut) ntags++;
   if(tagb2>btagcut) ntags++;
-  return chi2*pow(btagbonus,ntags);
+  return chi2*pow(1./btagbonus,ntags);
 }
 
 float ReconstructionQuality::TTChi2_tagged_higgspt(float mthad, float mtlep, float tagbhad, float tagblep, float tagb1, float tagb2,float pt ){
@@ -202,39 +284,103 @@ float ReconstructionQuality::TTWChi2(Interpretation& i){
   i.SetTag("TTWChi2",tag);
   return tag;
 }
+
+float ReconstructionQuality::TTWHLikelihood(Interpretation& i){
+  float tag=TTWHLikelihood(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.Higgs_M());
+  i.SetTag("TTWHLikelihood",tag);
+  return tag;
+}
+float ReconstructionQuality::TTWLikelihood(Interpretation& i){
+  float tag=TTWLikelihood(i.TopHad_M(),i.TopLep_M(),i.WHad_M());
+  i.SetTag("TTWLikelihood",tag);
+  return tag;
+}
+float ReconstructionQuality::TTWHLikelihood_tagged(Interpretation& i){
+  float tag=TTWHLikelihood_tagged(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.Higgs_M(),i.BHad_CSV(),i.BLep_CSV(),i.B1_CSV(),i.B2_CSV());
+  i.SetTag("TTWHLikelihood_tagged",tag);
+  return tag;
+}
+float ReconstructionQuality::TTWLikelihood_tagged(Interpretation& i, bool inclHiggsTags){
+  float tag;
+  if(inclHiggsTags) tag=TTWLikelihood_tagged(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.BHad_CSV(),i.BLep_CSV(),i.B1_CSV(),i.B2_CSV());
+  else tag=TTWLikelihood_tagged(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.BHad_CSV(),i.BLep_CSV());
+  i.SetTag("TTWLikelihood_tagged",tag);
+  return tag;
+}
+
+float ReconstructionQuality::TTWHishLikelihood(Interpretation& i){
+  float tag=TTWHishLikelihood(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.Higgs_M());
+  i.SetTag("TTWHishLikelihood",tag);
+  return tag;
+}
+float ReconstructionQuality::TTWishLikelihood(Interpretation& i){
+  float tag=TTWishLikelihood(i.TopHad_M(),i.TopLep_M(),i.WHad_M());
+  i.SetTag("TTWishLikelihood",tag);
+  return tag;
+}
+float ReconstructionQuality::TTWHishLikelihood_tagged(Interpretation& i){
+  float tag=TTWHishLikelihood_tagged(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.Higgs_M(),i.BHad_CSV(),i.BLep_CSV(),i.B1_CSV(),i.B2_CSV());
+  i.SetTag("TTWHishLikelihood_tagged",tag);
+  return tag;
+}
+float ReconstructionQuality::TTWishLikelihood_tagged(Interpretation& i, bool inclHiggsTags){
+  float tag;
+  if(inclHiggsTags) tag=TTWishLikelihood_tagged(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.BHad_CSV(),i.BLep_CSV(),i.B1_CSV(),i.B2_CSV());
+  else tag=TTWishLikelihood_tagged(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.BHad_CSV(),i.BLep_CSV());
+  i.SetTag("TTWishLikelihood_tagged",tag);
+  return tag;
+}
+
 float ReconstructionQuality::BLikelihood(float csv){
   csv=fmax(csv,-0.099);
-  float llh= h_CSV_b->Interpolate(csv);
+  float llh=Interpolate(h_CSV_b,csv);
   return llh;
 }
 float ReconstructionQuality::LLikelihood(float csv){
   csv=fmax(csv,-0.099);
-  float llh= h_CSV_l_w_c->Interpolate(csv);
+  float llh=Interpolate(h_CSV_l_w_c, csv);
   return llh;
 }
 float ReconstructionQuality::TopHadLikelihood(float m){
-  float llh= h_M_TopHad_reco->Interpolate(m);
+  float llh=Interpolate(h_M_TopHad_reco,m);
   return llh;
 }
 float ReconstructionQuality::TopHadishLikelihood(float m){
-  float llh= h_M_TopHad_best->Interpolate(m);
+  float llh=Interpolate(h_M_TopHad_best, m);
   return llh;
 }
 float ReconstructionQuality::TopLepLikelihood(float m){
-  float llh= h_M_TopLep_reco->Interpolate(m);
+  float llh=Interpolate(h_M_TopLep_reco,m);
   return llh;
 }
 float ReconstructionQuality::TopLepishLikelihood(float m){
-  float llh= h_M_TopLep_best->Interpolate(m);
+  float llh=Interpolate(h_M_TopLep_best, m);
   return llh;
 }
 float ReconstructionQuality::WHadLikelihood(float m){
-  float llh= h_M_WHad_reco->Interpolate(m);
+  float llh= Interpolate(h_M_WHad_reco,m);
   return llh;
 }
 float ReconstructionQuality::WHadishLikelihood(float m){
-  float llh= h_M_WHad_best->Interpolate(m);
+  float llh= Interpolate(h_M_WHad_best,m);
   return llh;
+}
+
+float ReconstructionQuality::HiggsLikelihood(float m){
+  float llh= Interpolate(h_M_Higgs_reco,m);
+  return llh;
+}
+float ReconstructionQuality::HiggsishLikelihood(float m){
+  float llh= Interpolate(h_M_Higgs_best,m);
+  return llh;
+}
+
+float ReconstructionQuality::Interpolate(TH1F* histo, float value){
+  if(value>histo->GetXaxis()->GetXmax()||value<histo->GetXaxis()->GetXmin()){
+    return tiny_likelihood;
+  }
+  float interp=histo->Interpolate(value);
+  return max(interp,tiny_likelihood);
 }
 
 float ReconstructionQuality::NBLikelihood(uint ntagged, uint njets, float* csvs){
