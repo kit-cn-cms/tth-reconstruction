@@ -1,3 +1,5 @@
+MEDIR=../tthME/
+
 CC=g++
 LD=g++
 
@@ -8,13 +10,17 @@ ROOTLD := $(shell root-config --ldflags)
 SOURCES:=$(wildcard src/*.cpp)
 OBJECTS:=$(patsubst src/%.cpp,tmp/%.o,$(SOURCES))
 
+MEINCL=-I${MEDIR}/SubProcesses/P0_Sigma_sm_gg_ttxh/ -I${MEDIR}/src
+MEOBJECTS=${MEDIR}/SubProcesses/P0_Sigma_sm_gg_ttxh/CPPProcess.o
+MELIBS=-L${MEDIR}/lib -lmodel_sm
+
 all : bin/test
 
 tmp/%.o : src/%.cpp
-	$(CC) $(ROOTC) -fPIC -I./interface -c -o $@ $<
+	$(CC) $(ROOTC) -fPIC -I./interface $(MEINCL) -c -o $@ $<
 
 bin/test : $(OBJECTS)
-	$(LD) $(ROOTLD) -o bin/test tmp/*o $(ROOTLIBS)
+	$(LD) $(ROOTLD) -o bin/test tmp/*o $(MEOBJECTS) $(ROOTLIBS) $(MELIBS)
 
 clean :
 	rm -f tmp/*; rm -f bin/*

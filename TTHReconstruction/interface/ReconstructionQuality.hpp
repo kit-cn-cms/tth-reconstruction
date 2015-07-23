@@ -4,6 +4,7 @@
 #include "TFile.h"
 #include "TLorentzVector.h"
 #include "Interpretation.hpp"
+#include "MECalculator.hpp"
 #include "TH1F.h"
 #include "TMath.h"
 #include <iostream>
@@ -105,6 +106,8 @@ private:
 
   float btagbonus;
   float tiny_likelihood;
+
+  MECalculator me;
 };
 
 #endif
