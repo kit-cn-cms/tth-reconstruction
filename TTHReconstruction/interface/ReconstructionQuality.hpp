@@ -78,6 +78,8 @@ public:
   float HiggsishLikelihood(float m);
 
   float TTH_ME(Interpretation& i);
+  float TTBB_ME(Interpretation& i);
+  float TTH_TTBB_ME_RATIO(Interpretation& i);
 
   float Interpolate(TH1F* histo, float value);
 

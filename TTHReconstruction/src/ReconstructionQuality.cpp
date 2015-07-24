@@ -50,6 +50,8 @@ float ReconstructionQuality::GetTag(std::string tag, Interpretation& i){
   else if(tag=="TTWHishLikelihood_tagged") return TTWHishLikelihood_tagged(i);
   else if(tag=="TTWishLikelihood_tagged") return TTWishLikelihood_tagged(i);
   else if(tag=="TTH_ME") return TTH_ME(i);
+  else if(tag=="TTBB_ME") return TTBB_ME(i);
+  else if(tag=="TTH_TTBB_ME_RATIO") return TTBB_ME(i);
 
 
   else{
@@ -334,7 +336,18 @@ float ReconstructionQuality::TTWishLikelihood_tagged(Interpretation& i, bool inc
 
 float ReconstructionQuality::TTH_ME(Interpretation& i){
   float tag=me.GetTTHMEsq(i.TopHad(),i.TopLep(),i.Higgs());
-  i.SetTag("TTWHishLikelihood_tagged",tag);
+  i.SetTag("TTH_ME",tag);
+  return tag;
+}
+
+float ReconstructionQuality::TTBB_ME(Interpretation& i){
+  float tag=me.GetTTBBMEsq(i.TopHad(),i.TopLep(),i.B1(),i.B2());
+  i.SetTag("TTBB_ME",tag);
+  return tag;
+}
+float ReconstructionQuality::TTH_TTBB_ME_RATIO(Interpretation& i){
+  float tag=me.GetTTHMEsq(i.TopHad(),i.TopLep(),i.Higgs())/me.GetTTBBMEsq(i.TopHad(),i.TopLep(),i.B1(),i.B2());
+  i.SetTag("TTH_TTBB_ME_RATIO",tag);
   return tag;
 }
 
