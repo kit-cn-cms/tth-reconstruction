@@ -333,7 +333,7 @@ float ReconstructionQuality::TTWishLikelihood_tagged(Interpretation& i, bool inc
 }
 
 float ReconstructionQuality::TTH_ME(Interpretation& i){
-  float tag=me.GetMEsq(i.TopHad(),i.TopLep(),i.Higgs());
+  float tag=me.GetTTHMEsq(i.TopHad(),i.TopLep(),i.Higgs());
   i.SetTag("TTWHishLikelihood_tagged",tag);
   return tag;
 }

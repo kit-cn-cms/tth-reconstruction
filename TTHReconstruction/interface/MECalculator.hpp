@@ -2,6 +2,7 @@
 #define MECALCULATOR
 
 #include "tthProcess.h"
+#include "ttbbProcess.h"
 #include "TLorentzVector.h"
 #include <iostream>
 #include <iomanip> 
@@ -11,12 +12,13 @@ class MECalculator{
 public:
   MECalculator();
 
-  float GetMEsq(const TLorentzVector & top, const TLorentzVector & tophad, const TLorentzVector & higgs);
-  float test();
+  float GetTTHMEsq(const TLorentzVector & top, const TLorentzVector & topbar, const TLorentzVector & higgs);
+  float GetTTBBMEsq(const TLorentzVector & top, const TLorentzVector & topbar, const TLorentzVector & b, const TLorentzVector & bbar);
   
 
 private:  
   tthProcess tthME;
+  ttbbProcess ttbbME;
  
 };
 
