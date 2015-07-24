@@ -51,7 +51,7 @@ float ReconstructionQuality::GetTag(std::string tag, Interpretation& i){
   else if(tag=="TTWishLikelihood_tagged") return TTWishLikelihood_tagged(i);
   else if(tag=="TTH_ME") return TTH_ME(i);
   else if(tag=="TTBB_ME") return TTBB_ME(i);
-  else if(tag=="TTH_TTBB_ME_RATIO") return TTBB_ME(i);
+  else if(tag=="TTH_TTBB_ME_RATIO") return TTH_TTBB_ME_RATIO(i);
 
 
   else{
