@@ -32,10 +32,11 @@ ReconstructionTester::ReconstructionTester(std::vector<std::string> tags_, strin
     InitHisto(tags_plus[t],"WHad_Pt_best",40,0,400);
 
     InitHisto(tags_plus[t],"TTH_ME_best",100,-20,-6);
-    InitHisto(tags_plus[t],"TTBB_ME_best",100,-25,-5);
+    InitHisto(tags_plus[t],"TTBB_ME_best",100,-25,-8);
     InitHisto(tags_plus[t],"TTH_ME_lin_best",80,0.0,0.00004);
-    InitHisto(tags_plus[t],"TTBB_ME_lin_best",80,0.0,0.00004);
-    InitHisto(tags_plus[t],"TTH_TTBB_ME_RATIO_best",1000,0,10);
+    InitHisto(tags_plus[t],"TTBB_ME_lin_best",80,0.0,0.000008);
+    InitHisto(tags_plus[t],"TTH_TTBB_ME_RATIO_best",75,-5,10);
+    InitHisto(tags_plus[t],"TTH_TTBB_ME_RATIO_lin_best",150,0,1500);
     InitHisto(tags_plus[t],"TTWHChi2_best",60,0,15);
     InitHisto(tags_plus[t],"TTWChi2_best",60,0,15);
     InitHisto(tags_plus[t],"TTWLikelihood_best",100,-30,-5);
@@ -193,7 +194,8 @@ void ReconstructionTester::PlotInt(std::string tag, Interpretation* i, std::stri
   FillHisto(tag,"TTBB_ME_"+suffix,log(quality.TTBB_ME(*i)));
   FillHisto(tag,"TTH_ME_lin_"+suffix,quality.TTH_ME(*i));
   FillHisto(tag,"TTBB_ME_lin_"+suffix,quality.TTBB_ME(*i));
-  FillHisto(tag,"TTH_TTBB_ME_RATIO_"+suffix,quality.TTH_TTBB_ME_RATIO(*i));
+  FillHisto(tag,"TTH_TTBB_ME_RATIO_lin_"+suffix,quality.TTH_TTBB_ME_RATIO(*i));
+  FillHisto(tag,"TTH_TTBB_ME_RATIO_"+suffix,log(quality.TTH_TTBB_ME_RATIO(*i)));
   FillHisto(tag,"TTWHChi2_"+suffix,-quality.TTWHChi2(*i));
   FillHisto(tag,"TTWChi2_"+suffix,-quality.TTWChi2(*i));
   FillHisto(tag,"TTWHLikelihood_"+suffix,log(quality.TTWHLikelihood(*i)));
