@@ -67,6 +67,10 @@ void FFS4_1(complex<double> F2[], complex<double> S3[], complex<double> COUP,
 void FFS4_2(complex<double> F1[], complex<double> S3[], complex<double> COUP,
     double M2, double W2, complex<double> F2[]);
 
+void FFS4_3(complex<double> F1[], complex<double> F2[], complex<double> COUP,
+    double M3, double W3, complex<double> S3[]);
+
+
 }  // end namespace MG5_sm
 
 #endif  // HelAmps_sm_H

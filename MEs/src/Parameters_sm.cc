@@ -90,6 +90,7 @@ void Parameters_sm::setDependentParameters()
 }
 void Parameters_sm::setDependentCouplings()
 {
+  GC_83 = -((mdl_complexi * mdl_yb)/mdl_sqrt__2);   
   GC_94 = -((mdl_complexi * mdl_yt)/mdl_sqrt__2); 
   GC_12 = mdl_complexi * mdl_G__exp__2; 
   GC_11 = mdl_complexi * G; 
@@ -215,7 +216,9 @@ void Parameters_sm::printDependentParameters()
 void Parameters_sm::printDependentCouplings()
 {
   cout <<  "sm model couplings dependent on event kinematics:" << endl; 
-cout << setw(20) <<  "GC_94 " <<  "= " << setiosflags(ios::scientific) <<
+  cout << setw(20) <<  "GC_83 " <<  "= " << setiosflags(ios::scientific) <<
+      setw(10) << GC_83 << endl;
+  cout << setw(20) <<  "GC_94 " <<  "= " << setiosflags(ios::scientific) <<
       setw(10) << GC_94 << endl;
   cout << setw(20) <<  "GC_12 " <<  "= " << setiosflags(ios::scientific) <<
       setw(10) << GC_12 << endl;
