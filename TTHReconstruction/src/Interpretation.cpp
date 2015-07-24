@@ -80,6 +80,10 @@ TLorentzVector Interpretation::B1(){
 TLorentzVector Interpretation::B2(){
   return b2;
 }
+TLorentzVector Interpretation::Total(){
+  return t_had+t_lep+higgs;
+}
+
 
 TLorentzVector Interpretation::Higgs(){
   return higgs;

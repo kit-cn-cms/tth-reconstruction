@@ -23,6 +23,7 @@ public:
   TLorentzVector WHad();
   TLorentzVector TopLep();
   TLorentzVector Higgs();
+  TLorentzVector Total();
   float TopHad_M();
   float TopLep_M();
   float WHad_M();
