@@ -1,7 +1,7 @@
 #include "MECalculator.hpp"
 
 MECalculator::MECalculator(){
-  process.initProc("data/param_card.dat");
+  tthME.initProc("data/param_card.dat");
 }
 
 float MECalculator::test(){
@@ -58,12 +58,12 @@ float MECalculator::GetMEsq(const TLorentzVector & top_in, const TLorentzVector 
   momenta.push_back(p4_topbar);
   momenta.push_back(p4_h);
 
-  process.setMomenta(momenta);
+  tthME.setMomenta(momenta);
 
-  process.sigmaKin();
+  tthME.sigmaKin();
 
-  const double* matrix_elements = process.getMatrixElements();
+  const double* matrix_elements = tthME.getMatrixElements();
 
-  assert(process.nprocesses==1);
+  assert(tthME.nprocesses==1);
   return matrix_elements[0];
 }

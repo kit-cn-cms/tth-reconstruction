@@ -1,7 +1,7 @@
 #ifndef MECALCULATOR
 #define MECALCULATOR
 
-#include "CPPProcess.h"
+#include "tthProcess.h"
 #include "TLorentzVector.h"
 #include <iostream>
 #include <iomanip> 
@@ -16,7 +16,7 @@ public:
   
 
 private:  
-  CPPProcess process;
+  tthProcess tthME;
  
 };
 

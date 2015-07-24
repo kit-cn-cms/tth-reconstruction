@@ -1,4 +1,4 @@
-MEDIR=../tthME/
+MEDIR=../MEs/
 
 CC=g++
 LD=g++
@@ -11,7 +11,7 @@ SOURCES:=$(wildcard src/*.cpp)
 OBJECTS:=$(patsubst src/%.cpp,tmp/%.o,$(SOURCES))
 
 MEINCL=-I${MEDIR}/SubProcesses/P0_Sigma_sm_gg_ttxh/ -I${MEDIR}/src
-MEOBJECTS=${MEDIR}/SubProcesses/P0_Sigma_sm_gg_ttxh/CPPProcess.o
+MEOBJECTS=${MEDIR}/SubProcesses/P0_Sigma_sm_gg_ttxh/tthProcess.o
 MELIBS=-L${MEDIR}/lib -lmodel_sm
 
 all : bin/test
