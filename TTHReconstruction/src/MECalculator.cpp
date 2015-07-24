@@ -2,6 +2,7 @@
 
 MECalculator::MECalculator(){
   tthME.initProc("data/param_card.dat");
+  ttbbME.initProc("data/param_card.dat");
 }
 
 
