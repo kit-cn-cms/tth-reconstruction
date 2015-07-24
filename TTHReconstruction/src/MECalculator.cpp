@@ -66,10 +66,14 @@ float MECalculator::GetTTHMEsq(const TLorentzVector & top_in, const TLorentzVect
   return matrix_elements[0];
 }
 
-float MECalculator::GetTTBBMEsq(const TLorentzVector & top_in, const TLorentzVector & topbar_in, const TLorentzVector & b, const TLorentzVector & bbar){
+float MECalculator::GetTTBBMEsq(const TLorentzVector & top_in, const TLorentzVector & topbar_in, const TLorentzVector & b_in, const TLorentzVector & bbar_in){
   const float mtop=173.;
+  const float mb=4.7;
   TLorentzVector top(top_in.Px(),top_in.Py(),top_in.Pz(),sqrt(mtop*mtop+top_in.P()*top_in.P()));
   TLorentzVector topbar(topbar_in.Px(),topbar_in.Py(),topbar_in.Pz(),sqrt(mtop*mtop+topbar_in.P()*topbar_in.P()));
+  TLorentzVector b(b_in.Px(),b_in.Py(),b_in.Pz(),sqrt(mb*mb+b_in.P()*b_in.P()));
+  TLorentzVector bbar(bbar_in.Px(),bbar_in.Py(),bbar_in.Pz(),sqrt(mb*mb+bbar_in.P()*bbar_in.P()));
+
   
   double p4_g1[4];
   double p4_g2[4];
