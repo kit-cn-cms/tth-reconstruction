@@ -31,14 +31,16 @@ ReconstructionTester::ReconstructionTester(std::vector<std::string> tags_, strin
     InitHisto(tags_plus[t],"TopLep_Pt_best",60,0,600);
     InitHisto(tags_plus[t],"WHad_Pt_best",40,0,400);
 
-    InitHisto(tags_plus[t],"test_best",40,0,400);
-
     InitHisto(tags_plus[t],"TTH_ME_best",100,-20,-6);
+    InitHisto(tags_plus[t],"TTH_ME_lin_best",80,0.00,0.00004);
     InitHisto(tags_plus[t],"TTWHChi2_best",60,0,15);
     InitHisto(tags_plus[t],"TTWChi2_best",60,0,15);
     InitHisto(tags_plus[t],"TTWLikelihood_best",100,-30,-5);
     InitHisto(tags_plus[t],"TTWHLikelihood_best",100,-30,-5);
-    //    InitHisto(tags_plus[t],"asd",100,0,10);
+
+    Init2dHisto(tags_plus[t],"TTH_ME_vs_CME_best",20,-20,-6,20,500,2000);
+    Init2dHisto(tags_plus[t],"TTH_ME_lin_vs_CME_best",40,0.00,0.00004,20,500,2000);
+
   }
 
   outfile=new TFile((outfilename+".root").c_str(),"RECREATE");        
@@ -68,9 +70,9 @@ ReconstructionTester::~ReconstructionTester(){
   h_matches->SetBinContent(5,nmatchBlep);
   h_matches->Write();
   
-  for(std::map<std::string,std::map<std::string,TH1F*> >::iterator t=allHistos.begin();t!=allHistos.end(); t++){
+  for(std::map<std::string,std::map<std::string,TH1*> >::iterator t=allHistos.begin();t!=allHistos.end(); t++){
     cout << "tag " << t->first << endl;
-    for(std::map<std::string,TH1F*>::iterator h=t->second.begin();h!=t->second.end(); h++){
+    for(std::map<std::string,TH1*>::iterator h=t->second.begin();h!=t->second.end(); h++){
       h->second->Write();
     }
   }
@@ -160,6 +162,13 @@ void ReconstructionTester::FillHisto(std::string tag,std::string name,float valu
   allHistos[tag][name]->Fill(value);
 }
 
+void ReconstructionTester::Init2dHisto(std::string tag,std::string name,int nbinsx,float xmin, float xmax,int nbinsy,float ymin, float ymax){
+  allHistos[tag][name]=new TH2F((name+"_"+tag).c_str(),(name+"_"+tag).c_str(),nbinsx,xmin,xmax,nbinsy,ymin,ymax);
+}
+void ReconstructionTester::Fill2dHisto(std::string tag,std::string name,float xvalue,float yvalue){
+  ((TH2*)allHistos[tag][name])->Fill(xvalue,yvalue);
+}
+
 
 void ReconstructionTester::PlotInt(std::string tag, Interpretation* i, std::string suffix){
   FillHisto(tag,"Higgs_M_"+suffix,i->Higgs_M());
@@ -176,15 +185,15 @@ void ReconstructionTester::PlotInt(std::string tag, Interpretation* i, std::stri
   FillHisto(tag,"TopHad_Eta_"+suffix,i->TopHad().Eta());
   FillHisto(tag,"TopLep_Eta_"+suffix,i->TopLep().Eta());
   FillHisto(tag,"WHad_Eta_"+suffix,i->WHad().Eta());
-
-  FillHisto(tag,"test_"+suffix,1);
   
   FillHisto(tag,"TTH_ME_"+suffix,log(quality.TTH_ME(*i)));
+  FillHisto(tag,"TTH_ME_lin_"+suffix,quality.TTH_ME(*i));
   FillHisto(tag,"TTWHChi2_"+suffix,-quality.TTWHChi2(*i));
   FillHisto(tag,"TTWChi2_"+suffix,-quality.TTWChi2(*i));
   FillHisto(tag,"TTWHLikelihood_"+suffix,log(quality.TTWHLikelihood(*i)));
   FillHisto(tag,"TTWLikelihood_"+suffix,log(quality.TTWLikelihood(*i)));
-  //  FillHisto(tag,"asd_"+suffix,0);
-  
+
+  Fill2dHisto(tag,"TTH_ME_vs_CME_"+suffix,log(quality.TTH_ME(*i)),i->Total().M());
+  Fill2dHisto(tag,"TTH_ME_lin_vs_CME_"+suffix,quality.TTH_ME(*i),i->Total().M());
    
 }
