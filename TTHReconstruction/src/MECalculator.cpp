@@ -7,8 +7,8 @@ MECalculator::MECalculator(){
 
 
 float MECalculator::GetTTHMEsq(const TLorentzVector & top_in, const TLorentzVector & topbar_in, const TLorentzVector & higgs_in){
-  const float mtop=173.;
-  const float mh=125.;
+  const double mtop=173.;
+  const double mh=125.;
   TLorentzVector top(top_in.Px(),top_in.Py(),top_in.Pz(),sqrt(mtop*mtop+top_in.P()*top_in.P()));
   TLorentzVector topbar(topbar_in.Px(),topbar_in.Py(),topbar_in.Pz(),sqrt(mtop*mtop+topbar_in.P()*topbar_in.P()));
   TLorentzVector higgs(higgs_in.Px(),higgs_in.Py(),higgs_in.Pz(),sqrt(mh*mh+higgs_in.P()*higgs_in.P()));
@@ -67,13 +67,21 @@ float MECalculator::GetTTHMEsq(const TLorentzVector & top_in, const TLorentzVect
 }
 
 float MECalculator::GetTTBBMEsq(const TLorentzVector & top_in, const TLorentzVector & topbar_in, const TLorentzVector & b_in, const TLorentzVector & bbar_in){
-  const float mtop=173.;
-  const float mb=4.7;
+  const double mtop=173.;
+  const double mb=4.7;
+  const double mh=125.;
   TLorentzVector top(top_in.Px(),top_in.Py(),top_in.Pz(),sqrt(mtop*mtop+top_in.P()*top_in.P()));
   TLorentzVector topbar(topbar_in.Px(),topbar_in.Py(),topbar_in.Pz(),sqrt(mtop*mtop+topbar_in.P()*topbar_in.P()));
-  TLorentzVector b(b_in.Px(),b_in.Py(),b_in.Pz(),sqrt(mb*mb+b_in.P()*b_in.P()));
-  TLorentzVector bbar(bbar_in.Px(),bbar_in.Py(),bbar_in.Pz(),sqrt(mb*mb+bbar_in.P()*bbar_in.P()));
-
+  
+  TLorentzVector b_massless(b_in.Px(),b_in.Py(),b_in.Pz(),fabs(b_in.P()));
+  TLorentzVector bbar_massless(bbar_in.Px(),bbar_in.Py(),bbar_in.Pz(),fabs(bbar_in.P()));
+  double mh_current=(b_massless+bbar_massless).M();
+  b_massless*=(mh/mh_current);
+  bbar_massless*=(mh/mh_current);
+  TLorentzVector b;
+  TLorentzVector bbar;
+  b.SetPtEtaPhiM(b_massless.Pt(),b_massless.Eta(),b_massless.Phi(),b_massless.M());
+  bbar.SetPtEtaPhiM(bbar_massless.Pt(),bbar_massless.Eta(),bbar_massless.Phi(),bbar_massless.M());
   
   double p4_g1[4];
   double p4_g2[4];
@@ -89,7 +97,7 @@ float MECalculator::GetTTBBMEsq(const TLorentzVector & top_in, const TLorentzVec
   TVector3 boost=ttbb.BoostVector();
   g1.Boost(boost);
   g2.Boost(boost);
-  
+ 
   p4_g1[0]=g1.E();
   p4_g1[1]=g1.Px();
   p4_g1[2]=g1.Py();
