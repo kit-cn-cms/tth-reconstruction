@@ -10,8 +10,8 @@ ROOTLD := $(shell root-config --ldflags)
 SOURCES:=$(wildcard src/*.cpp)
 OBJECTS:=$(patsubst src/%.cpp,tmp/%.o,$(SOURCES))
 
-MEINCL=-I${MEDIR}/src -I${MEDIR}/SubProcesses/P0_Sigma_sm_gg_ttxh/ -I${MEDIR}/SubProcesses/P0_Sigma_sm_gg_ttxbbx/
-MEOBJECTS=${MEDIR}/SubProcesses/P0_Sigma_sm_gg_ttxh/tthProcess.o ${MEDIR}/SubProcesses/P0_Sigma_sm_gg_ttxbbx/ttbbProcess.o
+MEINCL=-I${MEDIR}/src -I${MEDIR}/SubProcesses/P0_Sigma_sm_gg_ttxh/ -I${MEDIR}/SubProcesses/P0_Sigma_sm_gg_ttxbbx/ -I${MEDIR}/SubProcesses/P0_Sigma_sm_gg_ttxh_ttxbbx/
+MEOBJECTS=${MEDIR}/SubProcesses/P0_Sigma_sm_gg_ttxh/tthProcess.o ${MEDIR}/SubProcesses/P0_Sigma_sm_gg_ttxbbx/ttbbProcess.o ${MEDIR}/SubProcesses/P0_Sigma_sm_gg_ttxh_ttxbbx/tthbbProcess.o
 MELIBS=-L${MEDIR}/lib -lmodel_sm
 
 all : bin/test

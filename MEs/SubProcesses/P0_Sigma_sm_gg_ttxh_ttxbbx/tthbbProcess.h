@@ -5,8 +5,8 @@
 // Visit launchpad.net/madgraph5 and amcatnlo.web.cern.ch
 //==========================================================================
 
-#ifndef MG5_Sigma_sm_gg_ttxbbx_H
-#define MG5_Sigma_sm_gg_ttxbbx_H
+#ifndef MG5_Sigma_sm_gg_ttxh_ttxbbx_H
+#define MG5_Sigma_sm_gg_ttxh_ttxbbx_H
 
 #include <complex> 
 #include <vector> 
