@@ -30,20 +30,20 @@ ReconstructionTester::ReconstructionTester(std::vector<std::string> tags_, strin
     InitHisto(tags_plus[t],"TopHad_Pt_best",60,0,600);
     InitHisto(tags_plus[t],"TopLep_Pt_best",60,0,600);
     InitHisto(tags_plus[t],"WHad_Pt_best",40,0,400);
-
-    InitHisto(tags_plus[t],"TTH_ME_best",100,-20,-6);
-    InitHisto(tags_plus[t],"TTBB_ME_best",100,-25,-8);
-    InitHisto(tags_plus[t],"TTH_ME_lin_best",80,0.0,0.00004);
-    InitHisto(tags_plus[t],"TTBB_ME_lin_best",80,0.0,0.000008);
-    InitHisto(tags_plus[t],"TTH_TTBB_ME_RATIO_best",75,-5,10);
-    InitHisto(tags_plus[t],"TTH_TTBB_ME_RATIO_lin_best",150,0,1500);
+    
+    InitHisto(tags_plus[t],"TTH_ME_best",100,-18,-8);
+    InitHisto(tags_plus[t],"TTHBB_ME_best",100,-18,-8);
+    InitHisto(tags_plus[t],"TTBB_ON_ME_best",100,-18,-8);
+    InitHisto(tags_plus[t],"TTBB_OFF_ME_best",100,-18,-8);
+    InitHisto(tags_plus[t],"TTHBB_TTBB_ON_ME_RATIO_best",120,-6,6);
+    InitHisto(tags_plus[t],"TTHBB_TTBB_OFF_ME_RATIO_best",120,-6,6);
     InitHisto(tags_plus[t],"TTWHChi2_best",60,0,15);
     InitHisto(tags_plus[t],"TTWChi2_best",60,0,15);
     InitHisto(tags_plus[t],"TTWLikelihood_best",100,-30,-5);
     InitHisto(tags_plus[t],"TTWHLikelihood_best",100,-30,-5);
-
-    Init2dHisto(tags_plus[t],"TTH_ME_vs_CME_best",20,-20,-6,20,500,2000);
-    Init2dHisto(tags_plus[t],"TTH_ME_lin_vs_CME_best",40,0.00,0.00004,20,500,2000);
+    
+    //    Init2dHisto(tags_plus[t],"TTH_ME_vs_CME_best",20,-20,-6,20,500,2000);
+    //    Init2dHisto(tags_plus[t],"TTH_ME_lin_vs_CME_best",40,0.00,0.00004,20,500,2000);
 
   }
 
@@ -191,17 +191,18 @@ void ReconstructionTester::PlotInt(std::string tag, Interpretation* i, std::stri
   FillHisto(tag,"WHad_Eta_"+suffix,i->WHad().Eta());
   
   FillHisto(tag,"TTH_ME_"+suffix,log(quality.TTH_ME(*i)));
-  FillHisto(tag,"TTBB_ME_"+suffix,log(quality.TTBB_ME(*i)));
-  FillHisto(tag,"TTH_ME_lin_"+suffix,quality.TTH_ME(*i));
-  FillHisto(tag,"TTBB_ME_lin_"+suffix,quality.TTBB_ME(*i));
-  FillHisto(tag,"TTH_TTBB_ME_RATIO_lin_"+suffix,quality.TTH_TTBB_ME_RATIO(*i));
-  FillHisto(tag,"TTH_TTBB_ME_RATIO_"+suffix,log(quality.TTH_TTBB_ME_RATIO(*i)));
+  FillHisto(tag,"TTHBB_ME_"+suffix,log(quality.TTHBB_ME(*i)));
+  FillHisto(tag,"TTBB_ON_ME_"+suffix,log(quality.TTBB_ON_ME(*i)));
+  FillHisto(tag,"TTBB_OFF_ME_"+suffix,log(quality.TTBB_OFF_ME(*i)));
+  FillHisto(tag,"TTHBB_TTBB_ON_ME_RATIO_"+suffix,log(quality.TTHBB_TTBB_ON_ME_RATIO(*i)));
+  FillHisto(tag,"TTHBB_TTBB_OFF_ME_RATIO_"+suffix,log(quality.TTHBB_TTBB_OFF_ME_RATIO(*i)));
   FillHisto(tag,"TTWHChi2_"+suffix,-quality.TTWHChi2(*i));
   FillHisto(tag,"TTWChi2_"+suffix,-quality.TTWChi2(*i));
   FillHisto(tag,"TTWHLikelihood_"+suffix,log(quality.TTWHLikelihood(*i)));
   FillHisto(tag,"TTWLikelihood_"+suffix,log(quality.TTWLikelihood(*i)));
 
-  Fill2dHisto(tag,"TTH_ME_vs_CME_"+suffix,log(quality.TTH_ME(*i)),i->Total().M());
-  Fill2dHisto(tag,"TTH_ME_lin_vs_CME_"+suffix,quality.TTH_ME(*i),i->Total().M());
+
+  //  Fill2dHisto(tag,"TTH_ME_vs_CME_"+suffix,log(quality.TTH_ME(*i)),i->Total().M());
+  //  Fill2dHisto(tag,"TTH_ME_lin_vs_CME_"+suffix,quality.TTH_ME(*i),i->Total().M());
    
 }
