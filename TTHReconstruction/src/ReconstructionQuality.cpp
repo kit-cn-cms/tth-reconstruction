@@ -24,7 +24,7 @@ ReconstructionQuality::ReconstructionQuality(string filename){
   whad_sigma=10;
   btagcut=0.89;
   btagbonus=1000.;
-  tiny_likelihood=1e-3;
+  tiny_likelihood=1e-4;
 }
 
 float ReconstructionQuality::GetTag(std::string tag, Interpretation& i){
@@ -50,8 +50,13 @@ float ReconstructionQuality::GetTag(std::string tag, Interpretation& i){
   else if(tag=="TTWHishLikelihood_tagged") return TTWHishLikelihood_tagged(i);
   else if(tag=="TTWishLikelihood_tagged") return TTWishLikelihood_tagged(i);
   else if(tag=="TTH_ME") return TTH_ME(i);
-  else if(tag=="TTBB_ME") return TTBB_ME(i);
-  else if(tag=="TTH_TTBB_ME_RATIO") return TTH_TTBB_ME_RATIO(i);
+  else if(tag=="TTHBB_ME") return TTHBB_ME(i);
+  else if(tag=="TTBB_ON_ME") return TTBB_ON_ME(i);
+  else if(tag=="TTBB_OFF_ME") return TTBB_OFF_ME(i);
+  else if(tag=="TTH_TTBB_ON_ME_RATIO") return TTH_TTBB_ON_ME_RATIO(i);
+  else if(tag=="TTHBB_TTBB_ON_ME_RATIO") return TTHBB_TTBB_ON_ME_RATIO(i);
+  else if(tag=="TTH_TTBB_OFF_ME_RATIO") return TTH_TTBB_OFF_ME_RATIO(i);
+  else if(tag=="TTHBB_TTBB_OFF_ME_RATIO") return TTHBB_TTBB_OFF_ME_RATIO(i);
 
 
   else{
@@ -340,16 +345,45 @@ float ReconstructionQuality::TTH_ME(Interpretation& i){
   return tag;
 }
 
-float ReconstructionQuality::TTBB_ME(Interpretation& i){
-  float tag=me.GetTTBBMEsq(i.TopHad(),i.TopLep(),i.B1(),i.B2());
-  i.SetTag("TTBB_ME",tag);
+float ReconstructionQuality::TTBB_ON_ME(Interpretation& i){
+  float tag=me.GetTTBBMEsq_onshell(i.TopHad(),i.TopLep(),i.B1(),i.B2());
+  i.SetTag("TTBB_ON_ME",tag);
   return tag;
 }
-float ReconstructionQuality::TTH_TTBB_ME_RATIO(Interpretation& i){
-  float tag=me.GetTTHMEsq(i.TopHad(),i.TopLep(),i.Higgs())/me.GetTTBBMEsq(i.TopHad(),i.TopLep(),i.B1(),i.B2());
-  i.SetTag("TTH_TTBB_ME_RATIO",tag);
+float ReconstructionQuality::TTBB_OFF_ME(Interpretation& i){
+  float tag=me.GetTTBBMEsq_offshell(i.TopHad(),i.TopLep(),i.B1(),i.B2());
+  i.SetTag("TTBB_OFF_ME",tag);
   return tag;
 }
+
+
+float ReconstructionQuality::TTHBB_ME(Interpretation& i){
+  float tag=me.GetTTHBBMEsq(i.TopHad(),i.TopLep(),i.B1(),i.B2());
+  i.SetTag("TTHBB_ME",tag);
+  return tag;
+}
+
+float ReconstructionQuality::TTH_TTBB_ON_ME_RATIO(Interpretation& i){
+  float tag=me.GetTTHMEsq(i.TopHad(),i.TopLep(),i.Higgs())/me.GetTTBBMEsq_onshell(i.TopHad(),i.TopLep(),i.B1(),i.B2());
+  i.SetTag("TTH_TTBB_ON_ME_RATIO",tag);
+  return tag;
+}
+float ReconstructionQuality::TTHBB_TTBB_ON_ME_RATIO(Interpretation& i){
+  float tag=me.GetTTHBBMEsq(i.TopHad(),i.TopLep(),i.B1(),i.B2())/me.GetTTBBMEsq_onshell(i.TopHad(),i.TopLep(),i.B1(),i.B2());
+  i.SetTag("TTHBB_TTBB_ON_ME_RATIO",tag);
+  return tag;
+}
+float ReconstructionQuality::TTH_TTBB_OFF_ME_RATIO(Interpretation& i){
+  float tag=me.GetTTHMEsq(i.TopHad(),i.TopLep(),i.Higgs())/me.GetTTBBMEsq_offshell(i.TopHad(),i.TopLep(),i.B1(),i.B2());
+  i.SetTag("TTH_TTBB_OFF_ME_RATIO",tag);
+  return tag;
+}
+float ReconstructionQuality::TTHBB_TTBB_OFF_ME_RATIO(Interpretation& i){
+  float tag=me.GetTTHBBMEsq(i.TopHad(),i.TopLep(),i.B1(),i.B2())/me.GetTTBBMEsq_offshell(i.TopHad(),i.TopLep(),i.B1(),i.B2());
+  i.SetTag("TTHBB_TTBB_OFF_ME_RATIO",tag);
+  return tag;
+}
+
 
 float ReconstructionQuality::BLikelihood(float csv){
   csv=fmax(csv,-0.099);
