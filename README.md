@@ -8,5 +8,7 @@
     make
     cd ../P0_Sigma_sm_gg_ttxbbx/
     make
+    cd ../P0_Sigma_sm_gg_ttxh_ttxbbx/
+    make
     cd ../../../TTHReconstruction/
     make
