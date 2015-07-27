@@ -12,7 +12,7 @@
 
 class ReconstructionTester{
 public:
-  ReconstructionTester(std::vector<std::string> tags, std::string outfilename="test");
+  ReconstructionTester(std::vector<std::string> tags, std::string outfilename="test",bool testMEs=false);
   ~ReconstructionTester();
   void Analyze(const std::vector<TLorentzVector>& jetvecs, const std::vector<float>& jetcsvs, 
 	       const TLorentzVector& lepvec, const TVector2& metvec,
@@ -28,6 +28,7 @@ public:
 private:
   std::vector<std::string> tags;
   std::string outfilename;
+  bool testMEs;
   TFile* outfile;
   ReconstructionMCMatching mcmatcher;
   ReconstructionQuality quality;
