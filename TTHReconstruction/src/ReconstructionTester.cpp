@@ -21,10 +21,10 @@ ReconstructionTester::ReconstructionTester(std::vector<std::string> tags_, strin
     InitHisto(tags_plus[t],"TopLep_M_best",60,0,600);
     InitHisto(tags_plus[t],"WHad_M_best",40,0,400);
 
-    InitHisto(tags_plus[t],"Higgs_Eta_best",50,-2.5,2.5);
-    InitHisto(tags_plus[t],"TopHad_Eta_best",50,-2.5,2.5);
-    InitHisto(tags_plus[t],"TopLep_Eta_best",50,-2.5,2.5);
-    InitHisto(tags_plus[t],"WHad_Eta_best",50,-2.5,2.5);
+    InitHisto(tags_plus[t],"Higgs_Eta_best",60,-3,3);
+    InitHisto(tags_plus[t],"TopHad_Eta_best",60,-3,3);
+    InitHisto(tags_plus[t],"TopLep_Eta_best",60,-3,3);
+    InitHisto(tags_plus[t],"WHad_Eta_best",60,-3,3);
 
     InitHisto(tags_plus[t],"Higgs_Pt_best",40,0,400);
     InitHisto(tags_plus[t],"TopHad_Pt_best",60,0,600);
@@ -32,11 +32,11 @@ ReconstructionTester::ReconstructionTester(std::vector<std::string> tags_, strin
     InitHisto(tags_plus[t],"WHad_Pt_best",40,0,400);
     
     InitHisto(tags_plus[t],"TTH_ME_best",100,-18,-8);
-    InitHisto(tags_plus[t],"TTHBB_ME_best",100,-18,-8);
-    InitHisto(tags_plus[t],"TTBB_ON_ME_best",100,-18,-8);
-    InitHisto(tags_plus[t],"TTBB_OFF_ME_best",100,-18,-8);
-    InitHisto(tags_plus[t],"TTHBB_TTBB_ON_ME_RATIO_best",120,-6,6);
-    InitHisto(tags_plus[t],"TTHBB_TTBB_OFF_ME_RATIO_best",120,-6,6);
+    InitHisto(tags_plus[t],"TTHBB_ME_best",100,-15,-5);
+    InitHisto(tags_plus[t],"TTBB_ON_ME_best",100,-22,-10);
+    InitHisto(tags_plus[t],"TTBB_OFF_ME_best",100,-22,-10);
+    InitHisto(tags_plus[t],"TTHBB_TTBB_ON_ME_RATIO_best",120,-3,16);
+    InitHisto(tags_plus[t],"TTHBB_TTBB_OFF_ME_RATIO_best",120,-6,20);
     InitHisto(tags_plus[t],"TTWHChi2_best",60,0,15);
     InitHisto(tags_plus[t],"TTWChi2_best",60,0,15);
     InitHisto(tags_plus[t],"TTWLikelihood_best",100,-30,-5);
