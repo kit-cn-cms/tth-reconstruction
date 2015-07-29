@@ -224,27 +224,41 @@ float ReconstructionQuality::TTWLikelihood_comb(Interpretation& i){
 }
 
 float ReconstructionQuality::TTWHLikelihood_comb_ratio(float mthad, float mtlep, float mwhad, float mhiggs){
-  float llh=1;
-  llh*=TopHadLikelihood(mthad,false)/TopHadLikelihood_comb(mthad,false);
-  llh*=TopLepLikelihood(mtlep,false)/TopLepLikelihood_comb(mtlep,false);
-  llh*=WHadLikelihood(mwhad,false)/WHadLikelihood_comb(mwhad,false);
-  llh*=HiggsLikelihood(mhiggs,false)/HiggsLikelihood_comb(mhiggs,false);
-  return llh;
+  double n=1;
+  double d=1;
+  n*=TopHadLikelihood(mthad,false);
+  d*=TopHadLikelihood_comb(mthad,false);
+  n*=TopLepLikelihood(mtlep,false);
+  d*=TopLepLikelihood_comb(mtlep,false);
+  n*=WHadLikelihood(mwhad,false);
+  d*=WHadLikelihood_comb(mwhad,false);
+  n*=HiggsLikelihood(mhiggs,false);
+  d*=HiggsLikelihood_comb(mhiggs,false);
+  return n/(n+d);
 }
 float ReconstructionQuality::TTWBBLikelihood_comb_ratio(float mthad, float mtlep, float mwhad, float mhiggs){
-  float llh=1;
-  llh*=TopHadLikelihood(mthad,false)/TopHadLikelihood_comb(mthad,false);
-  llh*=TopLepLikelihood(mtlep,false)/TopLepLikelihood_comb(mtlep,false);
-  llh*=WHadLikelihood(mwhad,false)/WHadLikelihood_comb(mwhad,false);
-  llh*=BBLikelihood(mhiggs,false)/BBLikelihood_comb(mhiggs,false);
-  return llh;
+  double n=1;
+  double d=1;
+  n*=TopHadLikelihood(mthad,false);
+  d*=TopHadLikelihood_comb(mthad,false);
+  n*=TopLepLikelihood(mtlep,false);
+  d*=TopLepLikelihood_comb(mtlep,false);
+  n*=WHadLikelihood(mwhad,false);
+  d*=WHadLikelihood_comb(mwhad,false);
+  n*=BBLikelihood(mhiggs,false);
+  d*=BBLikelihood_comb(mhiggs,false);
+  return n/(n+d);
 }
 float ReconstructionQuality::TTWLikelihood_comb_ratio(float mthad, float mtlep, float mwhad){
-  float llh=1;
-  llh*=TopHadLikelihood(mthad,false)/TopHadLikelihood_comb(mthad,false);
-  llh*=TopLepLikelihood(mtlep,false)/TopLepLikelihood_comb(mtlep,false);
-  llh*=WHadLikelihood(mwhad,false)/WHadLikelihood_comb(mwhad,false);
-  return llh;
+  double n=1;
+  double d=1;
+  n*=TopHadLikelihood(mthad,false);
+  d*=TopHadLikelihood_comb(mthad,false);
+  n*=TopLepLikelihood(mtlep,false);
+  d*=TopLepLikelihood_comb(mtlep,false);
+  n*=WHadLikelihood(mwhad,false);
+  d*=WHadLikelihood_comb(mwhad,false);
+  return n/(n+d);
 }
 float ReconstructionQuality::TTWHLikelihood_comb_ratio(Interpretation& i){
   float tag=TTWHLikelihood_comb_ratio(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.Higgs_M());
@@ -617,22 +631,22 @@ float ReconstructionQuality::TTHBB_ME(Interpretation& i){
 }
 
 float ReconstructionQuality::TTH_TTBB_ON_ME_RATIO(Interpretation& i){
-  float tag=me.GetTTHMEsq(i.TopHad(),i.TopLep(),i.Higgs())/me.GetTTBBMEsq_onshell(i.TopHad(),i.TopLep(),i.B1(),i.B2());
+  float tag=1./(1+me.GetTTBBMEsq_onshell(i.TopHad(),i.TopLep(),i.B1(),i.B2())/me.GetTTHMEsq(i.TopHad(),i.TopLep(),i.Higgs()));
   i.SetTag("TTH_TTBB_ON_ME_RATIO",tag);
   return tag;
 }
 float ReconstructionQuality::TTHBB_TTBB_ON_ME_RATIO(Interpretation& i){
-  float tag=me.GetTTHBBMEsq(i.TopHad(),i.TopLep(),i.B1(),i.B2())/me.GetTTBBMEsq_onshell(i.TopHad(),i.TopLep(),i.B1(),i.B2());
+  float tag=1./(1+1e4*me.GetTTBBMEsq_onshell(i.TopHad(),i.TopLep(),i.B1(),i.B2())/me.GetTTHBBMEsq(i.TopHad(),i.TopLep(),i.B1(),i.B2()));
   i.SetTag("TTHBB_TTBB_ON_ME_RATIO",tag);
   return tag;
 }
 float ReconstructionQuality::TTH_TTBB_OFF_ME_RATIO(Interpretation& i){
-  float tag=me.GetTTHMEsq(i.TopHad(),i.TopLep(),i.Higgs())/me.GetTTBBMEsq_offshell(i.TopHad(),i.TopLep(),i.B1(),i.B2());
+  float tag=1./(1+me.GetTTBBMEsq_offshell(i.TopHad(),i.TopLep(),i.B1(),i.B2())/me.GetTTHMEsq(i.TopHad(),i.TopLep(),i.Higgs()));
   i.SetTag("TTH_TTBB_OFF_ME_RATIO",tag);
   return tag;
 }
 float ReconstructionQuality::TTHBB_TTBB_OFF_ME_RATIO(Interpretation& i){
-  float tag=me.GetTTHBBMEsq(i.TopHad(),i.TopLep(),i.B1(),i.B2())/me.GetTTBBMEsq_offshell(i.TopHad(),i.TopLep(),i.B1(),i.B2());
+  float tag=1./(1+1e4*me.GetTTBBMEsq_offshell(i.TopHad(),i.TopLep(),i.B1(),i.B2())/me.GetTTHBBMEsq(i.TopHad(),i.TopLep(),i.B1(),i.B2()));
   i.SetTag("TTHBB_TTBB_OFF_ME_RATIO",tag);
   return tag;
 }

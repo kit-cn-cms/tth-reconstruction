@@ -11,7 +11,7 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
-#include "ReconstructionTester.hpp"
+#include "Analyzer.hpp"
 
 using namespace std;
 typedef vector<TLorentzVector> LVs;
@@ -179,26 +179,27 @@ void test(){
 
   
   vector<string> tags;
-  tags.push_back("TTWChi2_tagged");
-  tags.push_back("TTWHChi2_tagged");
+  //  tags.push_back("TTWChi2_tagged");
+  //  tags.push_back("TTWHChi2_tagged");
   //  tags.push_back("TTWChi2_tagged_higgspt");
   //  tags.push_back("TTWChi2_tagged_higgsjetpt");
-  tags.push_back("TTWLikelihood_tagged");
-  tags.push_back("TTWHLikelihood_tagged");
-  tags.push_back("TTWBBLikelihood_tagged");
+  //  tags.push_back("TTWLikelihood_tagged");
+  //  tags.push_back("TTWHLikelihood_tagged");
+  //  tags.push_back("TTWBBLikelihood_tagged");
   tags.push_back("TTWLikelihood_comb_ratio_tagged");
   tags.push_back("TTWHLikelihood_comb_ratio_tagged");
   tags.push_back("TTWBBLikelihood_comb_ratio_tagged");
 
-  tags.push_back("TTWishLikelihood_tagged");
-  tags.push_back("TTWHishLikelihood_tagged");
+  //  tags.push_back("TTWishLikelihood_tagged");
+  //  tags.push_back("TTWHishLikelihood_tagged");
 
   //  tags.push_back("TTWLikelihood");
   //  tags.push_back("TTWHLikelihood");
 
 
 
-  ReconstructionTester tester(tags,outfilename,false);
+  //  ReconstructionTester tester(tags,outfilename,true);
+  Analyzer tester(string(outfilename),0,0,0);
 
   // loop
   long nentries = chain->GetEntries(); 
