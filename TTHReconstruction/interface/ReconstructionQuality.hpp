@@ -72,6 +72,8 @@ public:
   float TTWBBLikelihood_comb_ratio(Interpretation& i);
   float TTWLikelihood_comb_ratio(Interpretation& i);
 
+  float H_BB_Likelihoodratio(Interpretation& i);
+
   float TTWHLikelihood_tagged(float mthad, float mtlep, float mwhad, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2);
   float TTWBBLikelihood_tagged(float mthad, float mtlep, float mwhad, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2);
   float TTWLikelihood_tagged(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99.);
@@ -99,14 +101,20 @@ public:
   float BLikelihood(float csv);
   float LLikelihood(float csv);
   float NBLikelihood(uint ntagged, uint njets, float* csvs);
-  float TopHadLikelihood(float m);
-  float TopHadishLikelihood(float m);
-  float TopLepLikelihood(float m);
-  float TopLepishLikelihood(float m);
-  float WHadLikelihood(float m);
-  float WHadishLikelihood(float m);
-  float HiggsLikelihood(float m);
-  float HiggsishLikelihood(float m);
+  float TopHadLikelihood(float m, bool exclude_overflow=true);
+  float TopHadLikelihood_comb(float m, bool exclude_overflow=true);
+  float TopHadishLikelihood(float m, bool exclude_overflow=true);
+  float TopLepLikelihood(float m, bool exclude_overflow=true);
+  float TopLepLikelihood_comb(float m, bool exclude_overflow=true);
+  float TopLepishLikelihood(float m, bool exclude_overflow=true);
+  float WHadLikelihood(float m, bool exclude_overflow=true);
+  float WHadLikelihood_comb(float m, bool exclude_overflow=true);
+  float WHadishLikelihood(float m, bool exclude_overflow=true);
+  float HiggsLikelihood(float m, bool exclude_overflow=true);
+  float HiggsLikelihood_comb(float m, bool exclude_overflow=true);
+  float HiggsishLikelihood(float m, bool exclude_overflow=true);
+  float BBLikelihood(float m, bool exclude_overflow=true);
+  float BBLikelihood_comb(float m, bool exclude_overflow=true);
 
   float TTH_ME(Interpretation& i);
   float TTBB_OFF_ME(Interpretation& i);
@@ -117,7 +125,7 @@ public:
   float TTH_TTBB_OFF_ME_RATIO(Interpretation& i);
   float TTHBB_TTBB_OFF_ME_RATIO(Interpretation& i);
 
-  float Interpolate(TH1F* histo, float value);
+  float Interpolate(TH1F* histo, float value, bool exclude_overflow=true);
 
  
 private:
@@ -125,6 +133,7 @@ private:
   TH1F* h_CSV_b;
   TH1F* h_CSV_l_w_c;
   TH1F* h_M_Higgs_reco;
+  TH1F* h_M_BB_reco;
   TH1F* h_M_TopHad_reco;
   TH1F* h_M_TopLep_reco;
   TH1F* h_M_WHad_reco;
@@ -132,6 +141,11 @@ private:
   TH1F* h_M_TopHad_best;
   TH1F* h_M_TopLep_best;
   TH1F* h_M_WHad_best;
+  TH1F* h_M_Higgs_all;
+  TH1F* h_M_BB_all;
+  TH1F* h_M_TopHad_all;
+  TH1F* h_M_TopLep_all;
+  TH1F* h_M_WHad_all;
 
   float higgs_mean;
   float tophad_mean;

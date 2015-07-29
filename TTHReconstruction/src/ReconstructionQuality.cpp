@@ -7,6 +7,7 @@ ReconstructionQuality::ReconstructionQuality(string filename){
   h_CSV_b=(TH1F*)file->Get("CSV_b");
   h_CSV_l_w_c=(TH1F*)file->Get("CSV_l_w_c");
   h_M_Higgs_reco=(TH1F*)file->Get("M_Higgs_reco");
+  h_M_BB_reco=(TH1F*)file->Get("M_BB_reco");
   h_M_TopHad_reco=(TH1F*)file->Get("M_TopHad_reco");
   h_M_TopLep_reco=(TH1F*)file->Get("M_TopLep_reco");
   h_M_WHad_reco=(TH1F*)file->Get("M_WHad_reco");
@@ -14,6 +15,12 @@ ReconstructionQuality::ReconstructionQuality(string filename){
   h_M_TopHad_best=(TH1F*)file->Get("M_TopHad_best");
   h_M_TopLep_best=(TH1F*)file->Get("M_TopLep_best");
   h_M_WHad_best=(TH1F*)file->Get("M_WHad_best");
+  h_M_Higgs_all=(TH1F*)file->Get("M_Higgs_all");
+  h_M_BB_all=(TH1F*)file->Get("M_BB_all");
+  h_M_TopHad_all=(TH1F*)file->Get("M_TopHad_all");
+  h_M_TopLep_all=(TH1F*)file->Get("M_TopLep_all");
+  h_M_WHad_all=(TH1F*)file->Get("M_WHad_all");
+
   higgs_mean=111;
   tophad_mean=165;
   toplep_mean=168;
@@ -63,9 +70,11 @@ float ReconstructionQuality::GetTag(std::string tag, Interpretation& i){
   else if(tag=="TTWBBLikelihood_comb_ratio") return TTWBBLikelihood_comb_ratio(i);
   else if(tag=="TTWLikelihood_comb_ratio") return TTWLikelihood_comb_ratio(i);
 
-  else if(tag=="TTWHLikelihood_ratio_tagged") return TTWHLikelihood_ratio_tagged(i);
-  else if(tag=="TTWBBLikelihood_ratio_tagged") return TTWBBLikelihood_ratio_tagged(i);
-  else if(tag=="TTWLikelihood_ratio_tagged") return TTWLikelihood_ratio_tagged(i);
+  else if(tag=="TTWHLikelihood_comb_ratio_tagged") return TTWHLikelihood_comb_ratio_tagged(i);
+  else if(tag=="TTWBBLikelihood_comb_ratio_tagged") return TTWBBLikelihood_comb_ratio_tagged(i);
+  else if(tag=="TTWLikelihood_comb_ratio_tagged") return TTWLikelihood_comb_ratio_tagged(i);
+
+  else if(tag=="H_BB_Likelihoodratio") return H_BB_Likelihoodratio(i);
 
   else if(tag=="TTWHishLikelihood") return TTWHishLikelihood(i);
   else if(tag=="TTWishLikelihood") return TTWishLikelihood(i);
@@ -216,25 +225,25 @@ float ReconstructionQuality::TTWLikelihood_comb(Interpretation& i){
 
 float ReconstructionQuality::TTWHLikelihood_comb_ratio(float mthad, float mtlep, float mwhad, float mhiggs){
   float llh=1;
-  llh*=TopHadLikelihood(mthad)/TopHadLikelihood_comb(mthad);
-  llh*=TopLepLikelihood(mtlep)/TopLepLikelihood_comb(mtlep);
-  llh*=WHadLikelihood(mwhad)/WHadLikelihood_comb(mwhad);
-  llh*=HiggsLikelihood(mhiggs)/HiggsLikelihood_comb(mhiggs);
+  llh*=TopHadLikelihood(mthad,false)/TopHadLikelihood_comb(mthad,false);
+  llh*=TopLepLikelihood(mtlep,false)/TopLepLikelihood_comb(mtlep,false);
+  llh*=WHadLikelihood(mwhad,false)/WHadLikelihood_comb(mwhad,false);
+  llh*=HiggsLikelihood(mhiggs,false)/HiggsLikelihood_comb(mhiggs,false);
   return llh;
 }
 float ReconstructionQuality::TTWBBLikelihood_comb_ratio(float mthad, float mtlep, float mwhad, float mhiggs){
   float llh=1;
-  llh*=TopHadLikelihood(mthad)/TopHadLikelihood_comb(mthad);
-  llh*=TopLepLikelihood(mtlep)/TopLepLikelihood_comb(mtlep);
-  llh*=WHadLikelihood(mwhad)/WHadLikelihood_comb(mwhad);
-  llh*=BBLikelihood(mhiggs)/BBLikelihood_comb(mhiggs);
+  llh*=TopHadLikelihood(mthad,false)/TopHadLikelihood_comb(mthad,false);
+  llh*=TopLepLikelihood(mtlep,false)/TopLepLikelihood_comb(mtlep,false);
+  llh*=WHadLikelihood(mwhad,false)/WHadLikelihood_comb(mwhad,false);
+  llh*=BBLikelihood(mhiggs,false)/BBLikelihood_comb(mhiggs,false);
   return llh;
 }
 float ReconstructionQuality::TTWLikelihood_comb_ratio(float mthad, float mtlep, float mwhad){
   float llh=1;
-  llh*=TopHadLikelihood(mthad)/TopHadLikelihood_comb(mthad);
-  llh*=TopLepLikelihood(mtlep)/TopLepLikelihood_comb(mtlep);
-  llh*=WHadLikelihood(mwhad)/WHadLikelihood_comb(mwhad);
+  llh*=TopHadLikelihood(mthad,false)/TopHadLikelihood_comb(mthad,false);
+  llh*=TopLepLikelihood(mtlep,false)/TopLepLikelihood_comb(mtlep,false);
+  llh*=WHadLikelihood(mwhad,false)/WHadLikelihood_comb(mwhad,false);
   return llh;
 }
 float ReconstructionQuality::TTWHLikelihood_comb_ratio(Interpretation& i){
@@ -345,6 +354,14 @@ float ReconstructionQuality::TTWLikelihood_tagged(Interpretation& i, bool inclHi
   i.SetTag("TTWLikelihood_tagged",tag);
   return tag;
 }
+
+float ReconstructionQuality::H_BB_Likelihoodratio(Interpretation& i){
+  float mhiggs=i.Higgs_M();
+  float tag= 1/(1+BBLikelihood(mhiggs,false)/HiggsLikelihood(mhiggs,false));
+  i.SetTag("H_BB_Likelihoodratio",tag);
+  return tag;
+}
+
 
 float ReconstructionQuality::TTWHishLikelihood(float mthad, float mtlep, float mwhad, float mhiggs){
   float llh=1;
@@ -631,46 +648,75 @@ float ReconstructionQuality::LLikelihood(float csv){
   float llh=Interpolate(h_CSV_l_w_c, csv);
   return llh;
 }
-float ReconstructionQuality::TopHadLikelihood(float m){
-  float llh=Interpolate(h_M_TopHad_reco,m);
+float ReconstructionQuality::TopHadLikelihood(float m, bool exclude_overflow){
+  float llh=Interpolate(h_M_TopHad_reco,m, exclude_overflow);
   return llh;
 }
-float ReconstructionQuality::TopHadishLikelihood(float m){
-  float llh=Interpolate(h_M_TopHad_best, m);
+float ReconstructionQuality::TopHadLikelihood_comb(float m, bool exclude_overflow){
+  float llh=Interpolate(h_M_TopHad_all,m, exclude_overflow);
   return llh;
 }
-float ReconstructionQuality::TopLepLikelihood(float m){
-  float llh=Interpolate(h_M_TopLep_reco,m);
+float ReconstructionQuality::TopHadishLikelihood(float m, bool exclude_overflow){
+  float llh=Interpolate(h_M_TopHad_best, m, exclude_overflow);
   return llh;
 }
-float ReconstructionQuality::TopLepishLikelihood(float m){
-  float llh=Interpolate(h_M_TopLep_best, m);
+float ReconstructionQuality::TopLepLikelihood(float m, bool exclude_overflow){
+  float llh=Interpolate(h_M_TopLep_reco,m, exclude_overflow);
   return llh;
 }
-float ReconstructionQuality::WHadLikelihood(float m){
-  float llh= Interpolate(h_M_WHad_reco,m);
-  return llh;
-}
-float ReconstructionQuality::WHadishLikelihood(float m){
-  float llh= Interpolate(h_M_WHad_best,m);
+float ReconstructionQuality::TopLepLikelihood_comb(float m, bool exclude_overflow){
+  float llh=Interpolate(h_M_TopLep_all,m, exclude_overflow);
   return llh;
 }
 
-float ReconstructionQuality::HiggsLikelihood(float m){
-  float llh= Interpolate(h_M_Higgs_reco,m);
+float ReconstructionQuality::TopLepishLikelihood(float m, bool exclude_overflow){
+  float llh=Interpolate(h_M_TopLep_best, m, exclude_overflow);
   return llh;
 }
-float ReconstructionQuality::HiggsishLikelihood(float m){
-  float llh= Interpolate(h_M_Higgs_best,m);
+float ReconstructionQuality::WHadLikelihood(float m, bool exclude_overflow){
+  float llh= Interpolate(h_M_WHad_reco,m, exclude_overflow);
+  return llh;
+}
+float ReconstructionQuality::WHadLikelihood_comb(float m, bool exclude_overflow){
+  float llh= Interpolate(h_M_WHad_all,m, exclude_overflow);
   return llh;
 }
 
-float ReconstructionQuality::Interpolate(TH1F* histo, float value){
+float ReconstructionQuality::WHadishLikelihood(float m, bool exclude_overflow){
+  float llh= Interpolate(h_M_WHad_best,m, exclude_overflow);
+  return llh;
+}
+
+float ReconstructionQuality::HiggsLikelihood(float m, bool exclude_overflow){
+  float llh= Interpolate(h_M_Higgs_reco,m, exclude_overflow);
+  return llh;
+}
+float ReconstructionQuality::HiggsLikelihood_comb(float m, bool exclude_overflow){
+  float llh= Interpolate(h_M_Higgs_all,m, exclude_overflow);
+  return llh;
+}
+float ReconstructionQuality::BBLikelihood(float m, bool exclude_overflow){
+  float llh= Interpolate(h_M_BB_reco,m, exclude_overflow);
+  return llh;
+}
+float ReconstructionQuality::BBLikelihood_comb(float m, bool exclude_overflow){
+  float llh= Interpolate(h_M_BB_all,m, exclude_overflow);
+  return llh;
+}
+
+float ReconstructionQuality::HiggsishLikelihood(float m, bool exclude_overflow){
+  float llh= Interpolate(h_M_Higgs_best,m, exclude_overflow);
+  return llh;
+}
+
+float ReconstructionQuality::Interpolate(TH1F* histo, float value, bool exclude_overflow){
   if(value>histo->GetXaxis()->GetXmax()||value<histo->GetXaxis()->GetXmin()){
-    return tiny_likelihood;
+    if(exclude_overflow)
+      return tiny_likelihood;
+    else
+      return histo->GetBinContent(histo->FindBin(value));
   }
-  float interp=histo->Interpolate(value);
-  return max(interp,tiny_likelihood);
+  return fmax(histo->Interpolate(value),tiny_likelihood);
 }
 
 float ReconstructionQuality::NBLikelihood(uint ntagged, uint njets, float* csvs){
