@@ -20,8 +20,8 @@ ReconstructionTester::ReconstructionTester(std::vector<std::string> tags_, strin
   //  suffixes.push_back("random");
   //  suffixes.push_back("second");
   suffixes.push_back("best_and_foundAll");
-  suffixes.push_back("best_and_foundH");
-  suffixes.push_back("best_and_foundW");
+  //  suffixes.push_back("best_and_foundH");
+  //  suffixes.push_back("best_and_foundW");
   for(uint t=0; t<tags_plus.size(); t++){
     foundH[tags_plus[t]]=0;
     foundAll[tags_plus[t]]=0;
@@ -47,21 +47,23 @@ ReconstructionTester::ReconstructionTester(std::vector<std::string> tags_, strin
       InitHisto(tags_plus[t],"B1_CSV_"+suffixes[s],50,0,1);
       InitHisto(tags_plus[t],"B2_CSV_"+suffixes[s],50,0,1);
       */
-      InitHisto(tags_plus[t],"TTWHChi2_"+suffixes[s],120,0,40);
-      InitHisto(tags_plus[t],"TTWChi2_"+suffixes[s],120,0,40);
-      InitHisto(tags_plus[t],"TTWBBChi2_"+suffixes[s],120,0,40);
-      InitHisto(tags_plus[t],"TTWHChi2_minus_TTWBBChi2_"+suffixes[s],120,-10,30);
+      //      InitHisto(tags_plus[t],"TTWHChi2_"+suffixes[s],120,0,40);
+      //      InitHisto(tags_plus[t],"TTWChi2_"+suffixes[s],120,0,40);
+      //      InitHisto(tags_plus[t],"TTWBBChi2_"+suffixes[s],120,0,40);
+      //      InitHisto(tags_plus[t],"TTWHChi2_minus_TTWBBChi2_"+suffixes[s],120,-10,30);
       InitHisto(tags_plus[t],"TTWLikelihood_"+suffixes[s],100,-30,-5);
       InitHisto(tags_plus[t],"TTWHLikelihood_"+suffixes[s],100,-30,-5);
       InitHisto(tags_plus[t],"H_BB_Likelihoodratio_"+suffixes[s],100,0,1);
+      InitHisto(tags_plus[t],"TTWHLikelihood_comb_ratio_"+suffixes[s],100,0,1);
+      InitHisto(tags_plus[t],"TTWLikelihood_comb_ratio_"+suffixes[s],100,0,1);
       
       if(testMEs){
 	InitHisto(tags_plus[t],"TTH_ME_"+suffixes[s],100,-18,-8);
 	InitHisto(tags_plus[t],"TTHBB_ME_"+suffixes[s],100,-15,-5);
 	InitHisto(tags_plus[t],"TTBB_ON_ME_"+suffixes[s],100,-22,-10);
 	InitHisto(tags_plus[t],"TTBB_OFF_ME_"+suffixes[s],100,-22,-10);
-	InitHisto(tags_plus[t],"TTHBB_TTBB_ON_ME_RATIO_"+suffixes[s],120,-3,16);
-	InitHisto(tags_plus[t],"TTHBB_TTBB_OFF_ME_RATIO_"+suffixes[s],120,-6,20);
+	InitHisto(tags_plus[t],"TTHBB_TTBB_ON_ME_RATIO_"+suffixes[s],100,0,1);
+	InitHisto(tags_plus[t],"TTHBB_TTBB_OFF_ME_RATIO_"+suffixes[s],100,0,1);
 	
     //    Init2dHisto(tags_plus[t],"TTH_ME_vs_CME_best",20,-20,-6,20,500,2000);
     //    Init2dHisto(tags_plus[t],"TTH_ME_lin_vs_CME_best",40,0.00,0.00004,20,500,2000);
@@ -165,20 +167,20 @@ void ReconstructionTester::Analyze(const std::vector<TLorentzVector>& jetvecs, c
     }
     if(best_int[tags[t]]!=0 && mcmatcher.MatchH(*(best_int[tags[t]]))){
       foundH[tags[t]]++;
-      PlotInt(tags[t],best_int[tags[t]],"best_and_foundH");
+      //      PlotInt(tags[t],best_int[tags[t]],"best_and_foundH");
     }
     if(best_int[tags[t]]!=0 && mcmatcher.MatchWHad(*(best_int[tags[t]]))){
-      PlotInt(tags[t],best_int[tags[t]],"best_and_foundW");
+      //      PlotInt(tags[t],best_int[tags[t]],"best_and_foundW");
     }
     PlotInt(tags[t],best_int[tags[t]],"best");
   }
   if(best_mcmatch_int!=0){
     PlotInt("mcmatch",best_mcmatch_int,"best");
     if(mcmatcher.MatchWHad(*(best_mcmatch_int))){
-      PlotInt("mcmatch",best_mcmatch_int,"best_and_foundW");
+      //      PlotInt("mcmatch",best_mcmatch_int,"best_and_foundW");
     }
     if(mcmatcher.MatchH(*(best_mcmatch_int))){
-      PlotInt("mcmatch",best_mcmatch_int,"best_and_foundH");
+      //      PlotInt("mcmatch",best_mcmatch_int,"best_and_foundH");
     }
     if(mcmatcher.MatchTTHallQ(*(best_mcmatch_int))){
       PlotInt("mcmatch",best_mcmatch_int,"best_and_foundAll");
@@ -235,13 +237,15 @@ void ReconstructionTester::PlotInt(std::string tag, Interpretation* i, std::stri
   FillHisto(tag,"B1_CSV_"+suffix,i->B1_CSV());
   FillHisto(tag,"B2_CSV_"+suffix,i->B2_CSV());
   */
-  FillHisto(tag,"TTWHChi2_"+suffix,-quality.TTWHChi2(*i));
-  FillHisto(tag,"TTWHChi2_minus_TTWBBChi2_"+suffix,-quality.TTWHChi2(*i)+quality.TTWBBChi2(*i));
-  FillHisto(tag,"TTWBBChi2_"+suffix,-quality.TTWHChi2(*i));
-  FillHisto(tag,"TTWChi2_"+suffix,-quality.TTWChi2(*i));
+  //  FillHisto(tag,"TTWHChi2_"+suffix,-quality.TTWHChi2(*i));
+  //  FillHisto(tag,"TTWHChi2_minus_TTWBBChi2_"+suffix,-quality.TTWHChi2(*i)+quality.TTWBBChi2(*i));
+  //  FillHisto(tag,"TTWBBChi2_"+suffix,-quality.TTWHChi2(*i));
+  //  FillHisto(tag,"TTWChi2_"+suffix,-quality.TTWChi2(*i));
   FillHisto(tag,"TTWHLikelihood_"+suffix,log(quality.TTWHLikelihood(*i)));
   FillHisto(tag,"TTWLikelihood_"+suffix,log(quality.TTWLikelihood(*i)));
   FillHisto(tag,"H_BB_Likelihoodratio_"+suffix,quality.H_BB_Likelihoodratio(*i));
+  FillHisto(tag,"TTWHLikelihood_comb_ratio_"+suffix,quality.TTWHLikelihood_comb_ratio(*i));
+  FillHisto(tag,"TTWLikelihood_comb_ratio_"+suffix,quality.TTWLikelihood_comb_ratio(*i));
 
 
   if(testMEs){  
@@ -249,8 +253,8 @@ void ReconstructionTester::PlotInt(std::string tag, Interpretation* i, std::stri
     FillHisto(tag,"TTHBB_ME_"+suffix,log(quality.TTHBB_ME(*i)));
     FillHisto(tag,"TTBB_ON_ME_"+suffix,log(quality.TTBB_ON_ME(*i)));
     FillHisto(tag,"TTBB_OFF_ME_"+suffix,log(quality.TTBB_OFF_ME(*i)));
-    FillHisto(tag,"TTHBB_TTBB_ON_ME_RATIO_"+suffix,log(quality.TTHBB_TTBB_ON_ME_RATIO(*i)));
-    FillHisto(tag,"TTHBB_TTBB_OFF_ME_RATIO_"+suffix,log(quality.TTHBB_TTBB_OFF_ME_RATIO(*i)));
+    FillHisto(tag,"TTHBB_TTBB_ON_ME_RATIO_"+suffix,quality.TTHBB_TTBB_ON_ME_RATIO(*i));
+    FillHisto(tag,"TTHBB_TTBB_OFF_ME_RATIO_"+suffix,quality.TTHBB_TTBB_OFF_ME_RATIO(*i));
   }
 
   //  Fill2dHisto(tag,"TTH_ME_vs_CME_"+suffix,log(quality.TTH_ME(*i)),i->Total().M());
