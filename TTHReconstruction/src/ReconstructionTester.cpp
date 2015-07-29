@@ -27,7 +27,7 @@ ReconstructionTester::ReconstructionTester(std::vector<std::string> tags_, strin
     foundAll[tags_plus[t]]=0;
     for(uint s=0; s<suffixes.size(); s++){
       InitHisto(tags_plus[t],"Higgs_M_"+suffixes[s],40,0,400);
-      InitHisto(tags_plus[t],"TopHad_M_"+suffixes[s],60,0,600);
+      /*      InitHisto(tags_plus[t],"TopHad_M_"+suffixes[s],60,0,600);
       InitHisto(tags_plus[t],"TopLep_M_"+suffixes[s],60,0,600);
       InitHisto(tags_plus[t],"WHad_M_"+suffixes[s],40,0,400);
       
@@ -46,14 +46,14 @@ ReconstructionTester::ReconstructionTester(std::vector<std::string> tags_, strin
       InitHisto(tags_plus[t],"Q2_CSV_"+suffixes[s],50,0,1);
       InitHisto(tags_plus[t],"B1_CSV_"+suffixes[s],50,0,1);
       InitHisto(tags_plus[t],"B2_CSV_"+suffixes[s],50,0,1);
-      
+      */
       InitHisto(tags_plus[t],"TTWHChi2_"+suffixes[s],120,0,40);
       InitHisto(tags_plus[t],"TTWChi2_"+suffixes[s],120,0,40);
       InitHisto(tags_plus[t],"TTWBBChi2_"+suffixes[s],120,0,40);
       InitHisto(tags_plus[t],"TTWHChi2_minus_TTWBBChi2_"+suffixes[s],120,-10,30);
       InitHisto(tags_plus[t],"TTWLikelihood_"+suffixes[s],100,-30,-5);
       InitHisto(tags_plus[t],"TTWHLikelihood_"+suffixes[s],100,-30,-5);
-      InitHisto(tags_plus[t],"TTWH_TTW_LikelihoodRatio_"+suffixes[s],100,0,0.5);
+      InitHisto(tags_plus[t],"H_BB_Likelihoodratio_"+suffixes[s],100,0,1);
       
       if(testMEs){
 	InitHisto(tags_plus[t],"TTH_ME_"+suffixes[s],100,-18,-8);
@@ -214,7 +214,7 @@ void ReconstructionTester::Fill2dHisto(std::string tag,std::string name,float xv
 
 void ReconstructionTester::PlotInt(std::string tag, Interpretation* i, std::string suffix){
   FillHisto(tag,"Higgs_M_"+suffix,i->Higgs_M());
-  FillHisto(tag,"TopHad_M_"+suffix,i->TopHad_M());
+  /*  FillHisto(tag,"TopHad_M_"+suffix,i->TopHad_M());
   FillHisto(tag,"TopLep_M_"+suffix,i->TopLep_M());
   FillHisto(tag,"WHad_M_"+suffix,i->WHad_M());
   
@@ -234,14 +234,14 @@ void ReconstructionTester::PlotInt(std::string tag, Interpretation* i, std::stri
   FillHisto(tag,"Q2_CSV_"+suffix,i->Q2_CSV());
   FillHisto(tag,"B1_CSV_"+suffix,i->B1_CSV());
   FillHisto(tag,"B2_CSV_"+suffix,i->B2_CSV());
-
+  */
   FillHisto(tag,"TTWHChi2_"+suffix,-quality.TTWHChi2(*i));
   FillHisto(tag,"TTWHChi2_minus_TTWBBChi2_"+suffix,-quality.TTWHChi2(*i)+quality.TTWBBChi2(*i));
   FillHisto(tag,"TTWBBChi2_"+suffix,-quality.TTWHChi2(*i));
   FillHisto(tag,"TTWChi2_"+suffix,-quality.TTWChi2(*i));
   FillHisto(tag,"TTWHLikelihood_"+suffix,log(quality.TTWHLikelihood(*i)));
   FillHisto(tag,"TTWLikelihood_"+suffix,log(quality.TTWLikelihood(*i)));
-  FillHisto(tag,"TTWH_TTW_LikelihoodRatio_"+suffix,quality.TTWHLikelihood(*i)/quality.TTWLikelihood(*i));
+  FillHisto(tag,"H_BB_Likelihoodratio_"+suffix,quality.H_BB_Likelihoodratio(*i));
 
 
   if(testMEs){  
