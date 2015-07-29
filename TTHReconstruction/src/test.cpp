@@ -185,6 +185,11 @@ void test(){
   //  tags.push_back("TTWChi2_tagged_higgsjetpt");
   tags.push_back("TTWLikelihood_tagged");
   tags.push_back("TTWHLikelihood_tagged");
+  tags.push_back("TTWBBLikelihood_tagged");
+  tags.push_back("TTWLikelihood_comb_ratio_tagged");
+  tags.push_back("TTWHLikelihood_comb_ratio_tagged");
+  tags.push_back("TTWBBLikelihood_comb_ratio_tagged");
+
   tags.push_back("TTWishLikelihood_tagged");
   tags.push_back("TTWHishLikelihood_tagged");
 
@@ -193,7 +198,7 @@ void test(){
 
 
 
-  ReconstructionTester tester(tags,outfilename);
+  ReconstructionTester tester(tags,outfilename,false);
 
   // loop
   long nentries = chain->GetEntries(); 
