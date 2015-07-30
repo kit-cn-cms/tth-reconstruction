@@ -217,7 +217,8 @@ void test(){
 
     chain->GetEntry(iEntry+skipevents); 
     // selection
-    if(N_Jets<6||N_BTagsM<4||N_GenTopHad!=1||N_GenTopLep!=1) continue;
+    //    if(N_Jets<6||N_BTagsM<4||N_GenTopHad!=1||N_GenTopLep!=1) continue;
+    if(N_Jets<6||N_BTagsM<4) continue;
     nselected++;
     if(nselected%100==0){
       cout << "selected events " << nselected << endl;
