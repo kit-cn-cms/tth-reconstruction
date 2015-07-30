@@ -725,10 +725,10 @@ float ReconstructionQuality::HiggsishLikelihood(float m, bool exclude_overflow){
 
 float ReconstructionQuality::Interpolate(TH1F* histo, float value, bool exclude_overflow){
   if(value>histo->GetXaxis()->GetXmax()||value<histo->GetXaxis()->GetXmin()){
-    if(exclude_overflow)
-      return tiny_likelihood;
-    else
-      return histo->GetBinContent(histo->FindBin(value));
+    //    if(exclude_overflow)
+    //      return tiny_likelihood;
+    //    else
+    return histo->GetBinContent(histo->FindBin(value))*tiny_likelihood;
   }
   return fmax(histo->Interpolate(value),tiny_likelihood);
 }
