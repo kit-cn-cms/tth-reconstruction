@@ -176,30 +176,7 @@ void test(){
   float* AdditionalGenBJet_E = new float[20];
   chain->SetBranchAddress("AdditionalGenBJet_E",AdditionalGenBJet_E);
 
-
-  
-  vector<string> tags;
-  //  tags.push_back("TTWChi2_tagged");
-  //  tags.push_back("TTWHChi2_tagged");
-  //  tags.push_back("TTWChi2_tagged_higgspt");
-  //  tags.push_back("TTWChi2_tagged_higgsjetpt");
-  //  tags.push_back("TTWLikelihood_tagged");
-  //  tags.push_back("TTWHLikelihood_tagged");
-  //  tags.push_back("TTWBBLikelihood_tagged");
-  tags.push_back("TTWLikelihood_comb_ratio_tagged");
-  tags.push_back("TTWHLikelihood_comb_ratio_tagged");
-  tags.push_back("TTWBBLikelihood_comb_ratio_tagged");
-
-  //  tags.push_back("TTWishLikelihood_tagged");
-  //  tags.push_back("TTWHishLikelihood_tagged");
-
-  //  tags.push_back("TTWLikelihood");
-  //  tags.push_back("TTWHLikelihood");
-
-
-
-  //  ReconstructionTester tester(tags,outfilename,true);
-  Analyzer tester(string(outfilename),0,0,0);
+  Analyzer ana(outfilename);
 
   // loop
   long nentries = chain->GetEntries(); 
@@ -216,8 +193,6 @@ void test(){
     }
 
     chain->GetEntry(iEntry+skipevents); 
-    // selection
-    //    if(N_Jets<6||N_BTagsM<4||N_GenTopHad!=1||N_GenTopLep!=1) continue;
     if(N_Jets<6||N_BTagsM<4) continue;
     nselected++;
     if(nselected%100==0){
@@ -253,9 +228,9 @@ void test(){
     LV lepvec = getLV(Evt_Pt_PrimaryLepton,Evt_Eta_PrimaryLepton,Evt_Phi_PrimaryLepton,Evt_E_PrimaryLepton);
     TVector2 metvec;
     metvec.SetMagPhi(Evt_Pt_MET,Evt_Phi_MET);
-    tester.Analyze(jetvecs,jetcsvs,lepvec,metvec,
-		   vBHad_true,vQ1_true,vQ2_true,vBLep_true,
-		   vLep_true,vNu_true,vB1_true,vB2_true);
+    ana.Analyze(jetvecs,jetcsvs,lepvec,metvec,
+		vBHad_true,vQ1_true,vQ2_true,vBLep_true,
+		vLep_true,vNu_true,vB1_true,vB2_true);
   }
 
 }

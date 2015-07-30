@@ -15,117 +15,64 @@ public:
   ReconstructionQuality(std::string filename="data/likelihoodhistos.root");
 
   float GetTag(std::string tag, Interpretation& i);
-
-  float TTHChi2(float mthad, float mtlep, float mhiggs);
-  float TTBBChi2(float mthad, float mtlep, float mhiggs);
-  float TTChi2(float mthad, float mtlep);
+  // get chi2 containing 3 (4) terms: hadronic top-mass, leptonic top-mass, W-mass (, Higgs/BB-mass)
   float TTWHChi2(float mthad, float mtlep, float mhiggs, float mwhad);
   float TTWBBChi2(float mthad, float mtlep, float mhiggs, float mwhad);
   float TTWChi2(float mthad, float mtlep, float mwhad);
-  float TTHChi2(Interpretation& i);
-  float TTBBChi2(Interpretation& i);
-  float TTChi2(Interpretation& i);
   float TTWHChi2(Interpretation& i);
   float TTWBBChi2(Interpretation& i);
   float TTWChi2(Interpretation& i);
 
-  float TTHChi2_tagged(float mthad, float mtlep, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2);
-  float TTBBChi2_tagged(float mthad, float mtlep, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2);
-  float TTChi2_tagged(float mthad, float mtlep, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99.);
-  float TTWHChi2_tagged(float mthad, float mtlep, float mwhad, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2);
-  float TTWBBChi2_tagged(float mthad, float mtlep, float mwhad, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2);
-  float TTWChi2_tagged(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99.);
-  float TTHChi2_tagged(Interpretation& i);
-  float TTBBChi2_tagged(Interpretation& i);
-  float TTChi2_tagged(Interpretation& i, bool inclHiggsTags=true);
-  float TTWHChi2_tagged(Interpretation& i);
-  float TTWBBChi2_tagged(Interpretation& i);
-  float TTWChi2_tagged(Interpretation& i, bool inclHiggsTags=true);
-
-  float TTChi2_tagged_higgspt(float mthad, float mtlep, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99.,float pt =1.);
-  float TTWChi2_tagged_higgspt(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99.,float pt =1.);
-  float TTChi2_tagged_higgsjetpt(float mthad, float mtlep, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99., float p1=1, float pt2=1);
-  float TTWChi2_tagged_higgsjetpt(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99., float p1=1, float pt2=1);
-  float TTChi2_tagged_higgspt(Interpretation& i);
-  float TTWChi2_tagged_higgspt(Interpretation& i);
-  float TTChi2_tagged_higgsjetpt(Interpretation& i);
-  float TTWChi2_tagged_higgsjetpt(Interpretation& i);
-
+  // get likelihood for the masses of hadronic top, leptonic top, W (, Higgs/BB-mass) for a perfectly reconstructed tth-interpreatation
   float TTWHLikelihood(float mthad, float mtlep, float mhiggs, float mwhad);
   float TTWBBLikelihood(float mthad, float mtlep, float mhiggs, float mwhad);
   float TTWLikelihood(float mthad, float mtlep, float mwhad);
   float TTWHLikelihood(Interpretation& i);
   float TTWBBLikelihood(Interpretation& i);
   float TTWLikelihood(Interpretation& i);
-
+  // get likelihood for the masses of hadronic top, leptonic top, W (and Higgs/BB-mass) for combinatoric background
   float TTWHLikelihood_comb(float mthad, float mtlep, float mhiggs, float mwhad);
   float TTWBBLikelihood_comb(float mthad, float mtlep, float mhiggs, float mwhad);
   float TTWLikelihood_comb(float mthad, float mtlep, float mwhad);
   float TTWHLikelihood_comb(Interpretation& i);
   float TTWBBLikelihood_comb(Interpretation& i);
   float TTWLikelihood_comb(Interpretation& i);
-
-  float TTWHLikelihood_comb_ratio(float mthad, float mtlep, float mhiggs, float mwhad);
-  float TTWBBLikelihood_comb_ratio(float mthad, float mtlep, float mhiggs, float mwhad);
-  float TTWLikelihood_comb_ratio(float mthad, float mtlep, float mwhad);
-  float TTWHLikelihood_comb_ratio(Interpretation& i);
-  float TTWBBLikelihood_comb_ratio(Interpretation& i);
-  float TTWLikelihood_comb_ratio(Interpretation& i);
-
-  float H_BB_Likelihoodratio(Interpretation& i);
-
-  float TTWHLikelihood_tagged(float mthad, float mtlep, float mwhad, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2);
-  float TTWBBLikelihood_tagged(float mthad, float mtlep, float mwhad, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2);
-  float TTWLikelihood_tagged(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99.);
-  float TTWHLikelihood_tagged(Interpretation& i);
-  float TTWBBLikelihood_tagged(Interpretation& i);
-  float TTWLikelihood_tagged(Interpretation& i, bool inclHiggsTags=true);
-
-  float TTWHLikelihood_comb_ratio_tagged(float mthad, float mtlep, float mwhad, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2);
-  float TTWBBLikelihood_comb_ratio_tagged(float mthad, float mtlep, float mwhad, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2);
-  float TTWLikelihood_comb_ratio_tagged(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99.);
-  float TTWHLikelihood_comb_ratio_tagged(Interpretation& i);
-  float TTWBBLikelihood_comb_ratio_tagged(Interpretation& i);
-  float TTWLikelihood_comb_ratio_tagged(Interpretation& i, bool inclHiggsTags=true);
-
+  // get likelihood for the masses of hadronic top, leptonic top, W (and Higgs/BB-mass) for the best possible interpretation
   float TTWHishLikelihood(float mthad, float mtlep, float mhiggs, float mwhad);
   float TTWishLikelihood(float mthad, float mtlep, float mwhad);
-  float TTWHishLikelihood_tagged(float mthad, float mtlep, float mwhad, float mhiggs, float tagbhad, float tagblep, float tagb1, float tagb2);
-  float TTWishLikelihood_tagged(float mthad, float mtlep, float mwhad, float tagbhad, float tagblep, float tagb1=-99., float tagb2=-99.);
-
   float TTWHishLikelihood(Interpretation& i);
   float TTWishLikelihood(Interpretation& i);
-  float TTWHishLikelihood_tagged(Interpretation& i);
-  float TTWishLikelihood_tagged(Interpretation& i, bool inclHiggsTags=true);
 
+  // get the b-tagger likelihoods
   float BLikelihood(float csv);
   float LLikelihood(float csv);
   float NBLikelihood(uint ntagged, uint njets, float* csvs);
-  float TopHadLikelihood(float m, bool exclude_overflow=true);
-  float TopHadLikelihood_comb(float m, bool exclude_overflow=true);
-  float TopHadishLikelihood(float m, bool exclude_overflow=true);
-  float TopLepLikelihood(float m, bool exclude_overflow=true);
-  float TopLepLikelihood_comb(float m, bool exclude_overflow=true);
-  float TopLepishLikelihood(float m, bool exclude_overflow=true);
-  float WHadLikelihood(float m, bool exclude_overflow=true);
-  float WHadLikelihood_comb(float m, bool exclude_overflow=true);
-  float WHadishLikelihood(float m, bool exclude_overflow=true);
-  float HiggsLikelihood(float m, bool exclude_overflow=true);
-  float HiggsLikelihood_comb(float m, bool exclude_overflow=true);
-  float HiggsishLikelihood(float m, bool exclude_overflow=true);
-  float BBLikelihood(float m, bool exclude_overflow=true);
-  float BBLikelihood_comb(float m, bool exclude_overflow=true);
 
+  // get likelihoods for different masses
+  float TopHadLikelihood(float m);
+  float TopHadLikelihood_comb(float m);
+  float TopHadishLikelihood(float m);
+  float TopLepLikelihood(float m);
+  float TopLepLikelihood_comb(float m);
+  float TopLepishLikelihood(float m);
+  float WHadLikelihood(float m);
+  float WHadLikelihood_comb(float m);
+  float WHadishLikelihood(float m);
+  float HiggsLikelihood(float m);
+  float HiggsLikelihood_comb(float m);
+  float HiggsishLikelihood(float m);
+  float BBLikelihood(float m);
+  float BBLikelihood_comb(float m);
+
+  // get matrix element squared
   float TTH_ME(Interpretation& i);
+  // ttbb me, using bb-mass as it is
   float TTBB_OFF_ME(Interpretation& i);
+  // ttbb me, scaling bb-mass to 125 GeV
   float TTBB_ON_ME(Interpretation& i);
   float TTHBB_ME(Interpretation& i);
-  float TTH_TTBB_ON_ME_RATIO(Interpretation& i);
-  float TTHBB_TTBB_ON_ME_RATIO(Interpretation& i);
-  float TTH_TTBB_OFF_ME_RATIO(Interpretation& i);
-  float TTHBB_TTBB_OFF_ME_RATIO(Interpretation& i);
-
-  float Interpolate(TH1F* histo, float value, bool exclude_overflow=true);
+  
+  float Interpolate(TH1F* histo, float value);
 
  
 private:
@@ -158,9 +105,6 @@ private:
   
   float bb_slope;
 
-  float btagcut;
-
-  float btagbonus;
   float tiny_likelihood;
 
   MECalculator me;
