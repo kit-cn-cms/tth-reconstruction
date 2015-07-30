@@ -9,15 +9,20 @@ Analyzer::Analyzer(string outfilename_,float min_combo_prob_tth_,float min_combo
   nmatched_tth=0;
   nmatched_ttbb=0;
   outfile->cd();
-  h_best_tth_me_likelihood=new TH1F("best_tth_me_likelihood","best_tth_me_likelihood",30,-14,-8);
-  h_best_ttbb_me_likelihood=new TH1F("best_ttbb_me_likelihood","best_ttbb_me_likelihood",30,-14,-8);
-  h_best_ratio_me_likelihood=new TH1F("best_ratio_me_likelihood","best_ratio_me_likelihood",25,0,1);
-  h_best_tth_likelihood=new TH1F("best_tth_likelihood","best_tth_likelihood",20,-10,-6);
-  h_best_ttbb_likelihood=new TH1F("best_ttbb_likelihood","best_ttbb_likelihood",20,-10,-6);
-  h_best_ratio_likelihood=new TH1F("best_ratio_likelihood","best_ratio_likelihood",25,0,1);
-  h_best_tth_me=new TH1F("best_tth_me","best_tth_me",20,-6,-2);
-  h_best_ttbb_me=new TH1F("best_ttbb_me","best_ttbb_me",20,-5,3);
-  h_best_ratio_me=new TH1F("best_ratio_me","best_ratio_me",25,0,1);
+  h_best_tth_me_likelihood=new TH1F("best_tth_me_likelihood","best_tth_me_likelihood",50,-14,-9);
+  h_best_ttbb_me_likelihood=new TH1F("best_ttbb_me_likelihood","best_ttbb_me_likelihood",50,-14,-9);
+  h_best_ratio_me_likelihood=new TH1F("best_ratio_me_likelihood","best_ratio_me_likelihood",26,-0.1,1);
+  h_best_tth_likelihood=new TH1F("best_tth_likelihood","best_tth_likelihood",40,-10,-6);
+  h_best_ttbb_likelihood=new TH1F("best_ttbb_likelihood","best_ttbb_likelihood",40,-10,-6);
+  h_best_ratio_likelihood=new TH1F("best_ratio_likelihood","best_ratio_likelihood",26,-0.1,1);
+  h_best_tth_me=new TH1F("best_tth_me","best_tth_me",40,-6,-2);
+  h_best_ttbb_me=new TH1F("best_ttbb_me","best_ttbb_me",40,-5,0);
+  h_best_ratio_me=new TH1F("best_ratio_me","best_ratio_me",26,-0.1,1);
+  h_best_m_higgs_tthreco=new TH1F("best_m_higgs_tthreco","best_m_higgs_tthreco",40,0,300);
+  h_best_m_higgs_ttbbreco=new TH1F("best_m_higgs_ttbbreco","best_m_higgs_ttbbreco",40,0,300);
+  h_best_m_higgs_ttreco=new TH1F("best_m_higgs_ttreco","best_m_higgs_ttreco",40,0,300);
+
+
 }
 Analyzer::~Analyzer(){
   cout << "nevents " << nevents << endl;
@@ -34,6 +39,9 @@ Analyzer::~Analyzer(){
   h_best_tth_me->Write();
   h_best_ttbb_me->Write();
   h_best_ratio_me->Write();
+  h_best_m_higgs_tthreco->Write();
+  h_best_m_higgs_ttbbreco->Write();
+  h_best_m_higgs_ttreco->Write();
 
   outfile->Close();
 }
@@ -59,6 +67,7 @@ void Analyzer::Analyze(const std::vector<TLorentzVector>& jetvecs, const std::ve
   vector<Interpretation*> good_tth_ints;
   vector<Interpretation*> good_ttbb_ints;
   vector<Interpretation*> good_tt_ints;
+  const float min_prob=0.0;
   for(uint i=0;i<ints.size();i++){
     float combo_prob_tth=quality.TTWHLikelihood_comb_ratio(*(ints[i]));
     float combo_prob_ttbb=quality.TTWBBLikelihood_comb_ratio(*(ints[i]));
@@ -66,21 +75,21 @@ void Analyzer::Analyze(const std::vector<TLorentzVector>& jetvecs, const std::ve
     if(combo_prob_tth>max_combo_prob_tth){
       max_combo_prob_tth=combo_prob_tth;
       best_combo_tth=ints[i];
-      if(combo_prob_tth>0.8){
+      if(combo_prob_tth>min_prob){
 	good_tth_ints.push_back(ints[i]);
       }
     }
     if(combo_prob_ttbb>max_combo_prob_ttbb){
       max_combo_prob_ttbb=combo_prob_ttbb;
       best_combo_ttbb=ints[i];
-      if(combo_prob_ttbb>0.8){
+      if(combo_prob_ttbb>min_prob){
 	good_ttbb_ints.push_back(ints[i]);
       }
     }
     if(combo_prob_tt>max_combo_prob_tt){
       max_combo_prob_tt=combo_prob_tt;
       best_combo_tt=ints[i];
-      if(combo_prob_tt>0.8){
+      if(combo_prob_tt>min_prob){
 	good_tt_ints.push_back(ints[i]);
       }
 
@@ -95,7 +104,9 @@ void Analyzer::Analyze(const std::vector<TLorentzVector>& jetvecs, const std::ve
   //  cout << "intepreations " << ints.size() << endl;
   //  cout << "good tth intepreations " <<good_tth_ints.size() <<  endl;
   //  cout << "good ttbb intepreations " <<good_ttbb_ints.size() <<  endl;
-
+  h_best_m_higgs_tthreco->Fill(best_combo_tth!=0?best_combo_tth->Higgs_M():1);
+  h_best_m_higgs_ttreco->Fill(best_combo_tt!=0?best_combo_tt->Higgs_M():1);
+  h_best_m_higgs_ttbbreco->Fill(best_combo_ttbb!=0?best_combo_ttbb->Higgs_M():1);
 
   if( best_combo_tth!=0 && mcmatcher.MatchTTHallQ(*best_combo_tth) ){
     nmatched_tth++;
@@ -107,12 +118,12 @@ void Analyzer::Analyze(const std::vector<TLorentzVector>& jetvecs, const std::ve
     nmatched_tt++;
   }
 
-  double best_tth_me_likelihood=0;
-  double best_ttbb_me_likelihood=0;
-  double best_tth_likelihood=0;
-  double best_ttbb_likelihood=0;
-  double best_tth_me=0;
-  double best_ttbb_me=0;
+  double best_tth_me_likelihood=-1;
+  double best_ttbb_me_likelihood=-1;
+  double best_tth_likelihood=-1;
+  double best_ttbb_likelihood=-1;
+  double best_tth_me=-1;
+  double best_ttbb_me=-1;
 
   for(uint i=0;i< good_tth_ints.size();i++){
     float tthlike= quality.TTWHLikelihood(*good_tth_ints[i]);
@@ -140,15 +151,24 @@ void Analyzer::Analyze(const std::vector<TLorentzVector>& jetvecs, const std::ve
     }
 
   }
-  h_best_tth_me_likelihood->Fill(log10(best_tth_me_likelihood));
-  h_best_ttbb_me_likelihood->Fill(log10(best_ttbb_me_likelihood));
-  h_best_ratio_me_likelihood->Fill(best_tth_me_likelihood/(best_ttbb_me_likelihood+best_tth_me_likelihood));
-  h_best_tth_likelihood->Fill(log10(best_tth_likelihood));
-  h_best_ttbb_likelihood->Fill(log10(best_ttbb_likelihood));
-  h_best_ratio_likelihood->Fill(best_tth_likelihood/(best_ttbb_likelihood+best_tth_likelihood));
-  h_best_tth_me->Fill(log10(best_tth_me));
-  h_best_ttbb_me->Fill(log10(best_ttbb_me));
-  h_best_ratio_me->Fill(best_tth_me/(best_ttbb_me+best_tth_me));
+  float best_ratio_me_likelihood=-1;
+  float best_ratio_likelihood=-1;
+  float best_ratio_me=-1;
+  if(best_tth_me_likelihood>0&&best_ttbb_me_likelihood>0)
+    best_ratio_me_likelihood = best_tth_me_likelihood/(best_ttbb_me_likelihood+best_tth_me_likelihood);
+  if(best_tth_likelihood>0&&best_ttbb_likelihood>0)
+    best_ratio_likelihood = best_tth_likelihood/(best_ttbb_likelihood+best_tth_likelihood);
+  if(best_tth_likelihood>0&&best_ttbb_likelihood>0)
+    best_ratio_me = best_tth_me/(best_ttbb_me+best_tth_me);
+  h_best_tth_me_likelihood->Fill(best_tth_me_likelihood>0?log10(best_tth_me_likelihood):-1e20);
+  h_best_ttbb_me_likelihood->Fill(best_ttbb_me_likelihood>0?log10(best_ttbb_me_likelihood):-1e20);
+  h_best_ratio_me_likelihood->Fill(best_ratio_me_likelihood);
+  h_best_tth_likelihood->Fill(best_tth_likelihood>0?log10(best_tth_likelihood):-1e20);
+  h_best_ttbb_likelihood->Fill(best_ttbb_likelihood>0?log10(best_ttbb_likelihood):-1e20);
+  h_best_ratio_likelihood->Fill(best_ratio_likelihood);
+  h_best_tth_me->Fill(best_tth_me>0?log10(best_tth_me):-1e20);
+  h_best_ttbb_me->Fill(best_ttbb_me>0?log10(best_ttbb_me):-1e20);
+  h_best_ratio_me->Fill(best_ratio_me);
   
   for(uint i=0;i<ints.size();i++){
     delete ints[i];

@@ -43,7 +43,9 @@ private:
   TH1F* h_best_tth_me;
   TH1F* h_best_ttbb_me;
   TH1F* h_best_ratio_me;
-
+  TH1F* h_best_m_higgs_tthreco;
+  TH1F* h_best_m_higgs_ttbbreco;
+  TH1F* h_best_m_higgs_ttreco;
  
 };
 
