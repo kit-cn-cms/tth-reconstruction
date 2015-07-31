@@ -194,10 +194,6 @@ void test(){
 
     chain->GetEntry(iEntry+skipevents); 
     if(N_Jets<6||N_BTagsM<4) continue;
-    nselected++;
-    if(nselected%100==0){
-      cout << "selected events " << nselected << endl;
-    }
     TLorentzVector vHiggs_true=getLV(GenHiggs_Pt,GenHiggs_Eta,GenHiggs_Phi);
     TLorentzVector vTopHad_true=getLV(GenTopHad_Pt[0],GenTopHad_Eta[0],GenTopHad_Phi[0]);
     TLorentzVector vTopLep_true=getLV(GenTopLep_Pt[0],GenTopLep_Eta[0],GenTopLep_Phi[0]);
@@ -228,6 +224,11 @@ void test(){
     LV lepvec = getLV(Evt_Pt_PrimaryLepton,Evt_Eta_PrimaryLepton,Evt_Phi_PrimaryLepton,Evt_E_PrimaryLepton);
     TVector2 metvec;
     metvec.SetMagPhi(Evt_Pt_MET,Evt_Phi_MET);
+    nselected++;
+    if(nselected%100==0){
+      cout << "selected events " << nselected << endl;
+    }
+
     ana.Analyze(jetvecs,jetcsvs,lepvec,metvec,
 		vBHad_true,vQ1_true,vQ2_true,vBLep_true,
 		vLep_true,vNu_true,vB1_true,vB2_true);
