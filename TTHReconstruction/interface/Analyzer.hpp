@@ -44,6 +44,10 @@ private:
   TH1F* h_best_tth_me;
   TH1F* h_best_ttbb_me;
   TH1F* h_best_ratio_me;
+  TH1F* h_tth_me_best_tth_likelihood;
+  TH1F* h_ttbb_me_best_ttbb_likelihood;
+  TH1F* h_ratio_me_best_likelihood;
+
   TH1F* h_best_m_higgs_tthreco;
   TH1F* h_best_m_higgs_ttbbreco;
   TH1F* h_best_m_higgs_ttreco;
@@ -59,6 +63,28 @@ private:
   TH1F* h_sum_tth_me;
   TH1F* h_sum_ttbb_me;
   TH1F* h_sum_ratio_me; 
+  TH1F* h_mcmatched_tth_me;
+  TH1F* h_mcmatched_ttbb_me;
+  TH1F* h_mcmatched_ratio_me;
+  TH1F* h_best_mcmatched_tth_me;
+  TH1F* h_best_mcmatched_ttbb_me;
+  TH1F* h_best_mcmatched_ratio_me;
+  TH1F* h_perfect_tth_me;
+  TH1F* h_perfect_ttbb_me;
+  TH1F* h_perfect_ratio_me;
+  TH1F* h_mcmatched_tth_likelihood;
+  TH1F* h_mcmatched_ttbb_likelihood;
+  TH1F* h_mcmatched_ratio_likelihood;
+  TH1F* h_best_mcmatched_tth_likelihood;
+  TH1F* h_best_mcmatched_ttbb_likelihood;
+  TH1F* h_best_mcmatched_ratio_likelihood;
+
+  TH1F* h_njets;
+  TH1F* h_ntags;
+  TH1F* h_HT;
+  TH1F* h_mass;
+
+
 };
 
 #endif
