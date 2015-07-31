@@ -47,8 +47,8 @@ Analyzer::Analyzer(string outfilename):generator(InterpretationGenerator(IntType
   h_sum_tth_likelihood=new TH1F("sum_tth_likelihood","sum_tth_likelihood",40,-16,-4);
   h_sum_ttbb_likelihood=new TH1F("sum_ttbb_likelihood","sum_ttbb_likelihood",40,-16,-4);
   h_sum_ratio_likelihood=new TH1F("sum_ratio_likelihood","sum_ratio_likelihood",26,-0.1,1);
-  h_sum_tth_me=new TH1F("sum_tth_me","sum_tth_me",40,-3,-10);
-  h_sum_ttbb_me=new TH1F("sum_ttbb_me","sum_ttbb_me",40,-3,-10);
+  h_sum_tth_me=new TH1F("sum_tth_me","sum_tth_me",40,-4,1);
+  h_sum_ttbb_me=new TH1F("sum_ttbb_me","sum_ttbb_me",40,-4,1);
   h_sum_ratio_me=new TH1F("sum_ratio_me","sum_ratio_me",26,-0.1,1);
 
   h_mcmatched_tth_me=new TH1F("mcmatched_tth_me","mcmatched_tth_me",40,-6.5,-2.5);
@@ -58,11 +58,27 @@ Analyzer::Analyzer(string outfilename):generator(InterpretationGenerator(IntType
   h_best_mcmatched_ttbb_me=new TH1F("best_mcmatched_ttbb_me","best_mcmatched_ttbb_me",40,-4.5,-1.5);
   h_best_mcmatched_ratio_me=new TH1F("best_mcmatched_ratio_me","best_mcmatched_ratio_me",26,-0.1,1);
 
-  h_mcmatched_tth_likelihood=new TH1F("mcmatched_tth_likelihood","mcmatched_tth_likelihood",40,-16,-4);
-  h_mcmatched_ttbb_likelihood=new TH1F("mcmatched_ttbb_likelihood","mcmatched_ttbb_likelihood",40,-16,-4);
+  h_mcmatched_tth_me_vs_cme=new TH2F("mcmatched_tth_me_vs_cme","mcmatched_tth_me_vs_cme",20,-6.5,-2.5,20,500,2500);
+  h_mcmatched_ttbb_me_vs_cme=new TH2F("mcmatched_ttbb_me_vs_cme","mcmatched_ttbb_me_vs_cme",20,-4.5,-1.5,20,500,2500);
+
+  h_mcmatched_sum_tth_me=new TH1F("mcmatched_sum_tth_me","mcmatched_sum_tth_me",40,-3,1);
+  h_mcmatched_sum_ttbb_me=new TH1F("mcmatched_sum_ttbb_me","mcmatched_sum_ttbb_me",40,-3,1);
+  h_mcmatched_sum_ratio_me=new TH1F("mcmatched_sum_ratio_me","mcmatched_sum_ratio_me",26,-0.1,1);
+  h_mcmatched_sum_tth_likelihood=new TH1F("mcmatched_sum_tth_likelihood","mcmatched_sum_tth_likelihood",40,-14,-4);
+  h_mcmatched_sum_ttbb_likelihood=new TH1F("mcmatched_sum_ttbb_likelihood","mcmatched_sum_ttbb_likelihood",40,-13,-3);
+  h_mcmatched_sum_ratio_likelihood=new TH1F("mcmatched_sum_ratio_likelihood","mcmatched_sum_ratio_likelihood",26,-0.1,1);
+  h_mcmatched_sum_tth_me_likelihood=new TH1F("mcmatched_sum_tth_me_likelihood","mcmatched_sum_tth_me_likelihood",40,-18,-8);
+  h_mcmatched_sum_ttbb_me_likelihood=new TH1F("mcmatched_sum_ttbb_me_likelihood","mcmatched_sum_ttbb_me_likelihood",40,-16,-6);
+  h_mcmatched_sum_ratio_me_likelihood=new TH1F("mcmatched_sum_ratio_me_likelihood","mcmatched_sum_ratio_me_likelihood",26,-.1,1);
+
+  h_mcmatched_tth_me_likelihood=new TH1F("mcmatched_tth_me_likelihood","mcmatched_tth_me_likelihood",40,-18,-6);
+  h_mcmatched_ttbb_me_likelihood=new TH1F("mcmatched_ttbb_me_likelihood","mcmatched_ttbb_me_likelihood",40,-18,-6);
+  h_mcmatched_ratio_me_likelihood=new TH1F("mcmatched_ratio_me_likelihood","mcmatched_ratio_me_likelihood",26,-0.1,1);
+  h_mcmatched_tth_likelihood=new TH1F("mcmatched_tth_likelihood","mcmatched_tth_likelihood",40,-20,-5);
+  h_mcmatched_ttbb_likelihood=new TH1F("mcmatched_ttbb_likelihood","mcmatched_ttbb_likelihood",40,-18,-5);
   h_mcmatched_ratio_likelihood=new TH1F("mcmatched_ratio_likelihood","mcmatched_ratio_likelihood",26,-0.1,1);
-  h_best_mcmatched_tth_likelihood=new TH1F("best_mcmatched_tth_likelihood","best_mcmatched_tth_likelihood",40,-16,-4);
-  h_best_mcmatched_ttbb_likelihood=new TH1F("best_mcmatched_ttbb_likelihood","best_mcmatched_ttbb_likelihood",40,-16,-4);
+  h_best_mcmatched_tth_likelihood=new TH1F("best_mcmatched_tth_likelihood","best_mcmatched_tth_likelihood",40,-20,-5);
+  h_best_mcmatched_ttbb_likelihood=new TH1F("best_mcmatched_ttbb_likelihood","best_mcmatched_ttbb_likelihood",40,-20,-5);
   h_best_mcmatched_ratio_likelihood=new TH1F("best_mcmatched_ratio_likelihood","best_mcmatched_ratio_likelihood",26,-0.1,1);
 
   h_perfect_tth_me=new TH1F("perfect_tth_me","perfect_tth_me",40,-7,-2);
@@ -126,6 +142,22 @@ Analyzer::~Analyzer(){
   h_best_mcmatched_tth_likelihood->Write();
   h_best_mcmatched_ttbb_likelihood->Write();
   h_best_mcmatched_ratio_likelihood->Write();
+  h_mcmatched_tth_me_vs_cme->Write();
+  h_mcmatched_ttbb_me_vs_cme->Write();
+
+  h_mcmatched_sum_tth_me->Write();
+  h_mcmatched_sum_ttbb_me->Write();
+  h_mcmatched_sum_ratio_me->Write();
+  h_mcmatched_sum_tth_likelihood->Write();
+  h_mcmatched_sum_ttbb_likelihood->Write();
+  h_mcmatched_sum_ratio_likelihood->Write();
+  h_mcmatched_sum_tth_me_likelihood->Write();
+  h_mcmatched_sum_ttbb_me_likelihood->Write();
+  h_mcmatched_sum_ratio_me_likelihood->Write();
+
+  h_mcmatched_tth_me_likelihood->Write();
+  h_mcmatched_ttbb_me_likelihood->Write();
+  h_mcmatched_ratio_me_likelihood->Write();
 
   h_njets->Write();
   h_ntags->Write();
@@ -352,10 +384,43 @@ void Analyzer::Analyze(const std::vector<TLorentzVector>& jetvecs, const std::ve
   if(reco_int!=0){
     h_mcmatched_tth_me->Fill(log10(quality.TTHBB_ME(*reco_int)));
     h_mcmatched_ttbb_me->Fill(log10(quality.TTBB_ON_ME(*reco_int)));
+    h_mcmatched_tth_me_vs_cme->Fill(log10(quality.TTHBB_ME(*reco_int)),reco_int->Total().M());
+    h_mcmatched_ttbb_me_vs_cme->Fill(log10(quality.TTBB_ON_ME(*reco_int)),reco_int->Total().M());
     h_mcmatched_ratio_me->Fill(quality.TTHBB_ME(*reco_int)/(quality.TTBB_ON_ME(*reco_int)+quality.TTHBB_ME(*reco_int)));
     h_mcmatched_tth_likelihood->Fill(log10(quality.TTWHLikelihood(*reco_int)));
     h_mcmatched_ttbb_likelihood->Fill(log10(quality.TTWBBLikelihood(*reco_int)));
     h_mcmatched_ratio_likelihood->Fill(quality.TTWHLikelihood(*reco_int)/(quality.TTWBBLikelihood(*reco_int)+quality.TTWHLikelihood(*reco_int)));
+
+    float meliketth=quality.TTWHLikelihood(*reco_int)*quality.TTHBB_ME(*reco_int);
+    float melikettbb=quality.TTWBBLikelihood(*reco_int)*quality.TTBB_ON_ME(*reco_int);
+    h_mcmatched_tth_me_likelihood->Fill(log10(meliketth));
+    h_mcmatched_ttbb_me_likelihood->Fill(log10(melikettbb));
+    h_mcmatched_ratio_me_likelihood->Fill(meliketth/(meliketth+melikettbb));
+    
+    float sum_meliketth=0;
+    float sum_melikettbb=0;
+    float sum_liketth=0;
+    float sum_likettbb=0;
+    float sum_metth=0;
+    float sum_mettbb=0;
+    for(uint i=0;i<ints.size();i++){
+      sum_meliketth+=quality.TTWHLikelihood(*(ints[i]))*quality.TTHBB_ME(*(ints[i]));
+      sum_melikettbb+=quality.TTWBBLikelihood(*(ints[i]))*quality.TTBB_ON_ME(*(ints[i]));
+      sum_liketth+=quality.TTWHLikelihood(*(ints[i]));
+      sum_likettbb+=quality.TTWBBLikelihood(*(ints[i]));
+      sum_metth+=quality.TTHBB_ME(*(ints[i]));
+      sum_mettbb+=quality.TTBB_ON_ME(*(ints[i]));
+    }
+    h_mcmatched_sum_tth_me->Fill(log10(sum_metth));
+    h_mcmatched_sum_ttbb_me->Fill(log10(sum_mettbb));
+    h_mcmatched_sum_ratio_me->Fill(sum_metth/(sum_metth+sum_mettbb));
+    h_mcmatched_sum_tth_likelihood->Fill(log10(sum_liketth));
+    h_mcmatched_sum_ttbb_likelihood->Fill(log10(sum_likettbb));
+    h_mcmatched_sum_ratio_likelihood->Fill(sum_liketth/(sum_liketth+sum_likettbb));
+    h_mcmatched_sum_tth_me_likelihood->Fill(log10(sum_meliketth));
+    h_mcmatched_sum_ttbb_me_likelihood->Fill(log10(sum_melikettbb));
+    h_mcmatched_sum_ratio_me_likelihood->Fill(sum_meliketth/(sum_meliketth+sum_melikettbb));
+
   }
   if(best_int!=0){
     h_best_mcmatched_tth_me->Fill(log10(quality.TTHBB_ME(*best_int)));

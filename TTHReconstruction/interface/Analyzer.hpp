@@ -79,6 +79,22 @@ private:
   TH1F* h_best_mcmatched_ttbb_likelihood;
   TH1F* h_best_mcmatched_ratio_likelihood;
 
+  TH1F* h_mcmatched_tth_me_likelihood;
+  TH1F* h_mcmatched_ttbb_me_likelihood;
+  TH1F* h_mcmatched_ratio_me_likelihood;
+  TH1F* h_mcmatched_sum_tth_me;
+  TH1F* h_mcmatched_sum_ttbb_me;
+  TH1F* h_mcmatched_sum_ratio_me;
+  TH1F* h_mcmatched_sum_tth_likelihood;
+  TH1F* h_mcmatched_sum_ttbb_likelihood;
+  TH1F* h_mcmatched_sum_ratio_likelihood;
+  TH1F* h_mcmatched_sum_tth_me_likelihood;
+  TH1F* h_mcmatched_sum_ttbb_me_likelihood;
+  TH1F* h_mcmatched_sum_ratio_me_likelihood;
+
+  TH2F* h_mcmatched_tth_me_vs_cme;
+  TH2F* h_mcmatched_ttbb_me_vs_cme;
+
   TH1F* h_njets;
   TH1F* h_ntags;
   TH1F* h_HT;
