@@ -36,7 +36,8 @@ public:
   float B1_CSV();
   float B2_CSV();
   void SetTag(std::string tag, float value);
-  float GetValue(std::string tag);
+  float GetTag(std::string tag);
+  bool HasTag(std::string tag);
   
   static std::vector<Interpretation*> GenerateTTHInterpretations(std::vector<TLorentzVector> jetvecs, std::vector<float> jetcsvs, TLorentzVector lepvec, TVector2 metvec);
   static std::vector<Interpretation*> GenerateTTInterpretations(std::vector<TLorentzVector> jetvecs, std::vector<float> jetcsvs, TLorentzVector lepvec, TVector2 metvec);

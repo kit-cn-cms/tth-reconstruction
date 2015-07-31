@@ -124,8 +124,12 @@ float Interpretation::B2_CSV(){
 void Interpretation::SetTag(std::string tag, float value){
   tags[tag]=value;
 }
-float Interpretation::GetValue(std::string tag){
+float Interpretation::GetTag(std::string tag){
   return tags[tag];
+}
+
+bool Interpretation::HasTag(std::string tag){
+  return tags.count(tag)<0;
 }
 
 void Interpretation::GetNuVecs(const TLorentzVector & lepvec, const TVector2 & metvec, TLorentzVector & nu1, TLorentzVector & nu2){
