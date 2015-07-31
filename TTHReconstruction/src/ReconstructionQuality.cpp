@@ -110,17 +110,20 @@ float ReconstructionQuality::TTWLikelihood(float mthad, float mtlep, float mwhad
   return llh;
 }
 float ReconstructionQuality::TTWHLikelihood(Interpretation& i){
+  if(i.HasTag("TTWHLikelihood")) return i.GetTag("TTWHLikelihood");
   float tag=TTWHLikelihood(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.Higgs_M());
   i.SetTag("TTWHLikelihood",tag);
   return tag;
 }
 float ReconstructionQuality::TTWBBLikelihood(Interpretation& i){
+  if(i.HasTag("TTWBBLikelihood")) return i.GetTag("TTWBBLikelihood");
   float tag=TTWBBLikelihood(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.Higgs_M());
   i.SetTag("TTWBBLikelihood",tag);
   return tag;
 }
 
 float ReconstructionQuality::TTWLikelihood(Interpretation& i){
+  if(i.HasTag("TTWLikelihood")) return i.GetTag("TTWLikelihood");
   float tag=TTWLikelihood(i.TopHad_M(),i.TopLep_M(),i.WHad_M());
   i.SetTag("TTWLikelihood",tag);
   return tag;
@@ -151,17 +154,20 @@ float ReconstructionQuality::TTWLikelihood_comb(float mthad, float mtlep, float 
   return llh;
 }
 float ReconstructionQuality::TTWHLikelihood_comb(Interpretation& i){
+  if(i.HasTag("TTWHLikelihood_comb")) return i.GetTag("TTWHLikelihood_comb");
   float tag=TTWHLikelihood_comb(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.Higgs_M());
   i.SetTag("TTWHLikelihood_comb",tag);
   return tag;
 }
 float ReconstructionQuality::TTWBBLikelihood_comb(Interpretation& i){
+  if(i.HasTag("TTWBBLikelihood_comb")) return i.GetTag("TTWBBLikelihood_comb");
   float tag=TTWBBLikelihood_comb(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.Higgs_M());
   i.SetTag("TTWBBLikelihood_comb",tag);
   return tag;
 }
 
 float ReconstructionQuality::TTWLikelihood_comb(Interpretation& i){
+  if(i.HasTag("TTWLikelihood_comb")) return i.GetTag("TTWLikelihood_comb");
   float tag=TTWLikelihood_comb(i.TopHad_M(),i.TopLep_M(),i.WHad_M());
   i.SetTag("TTWLikelihood_comb",tag);
   return tag;
@@ -186,17 +192,20 @@ float ReconstructionQuality::TTWishLikelihood(float mthad, float mtlep, float mw
 }
 
 float ReconstructionQuality::TTWHChi2(Interpretation& i){
+  if(i.HasTag("TTWHChi2")) return i.GetTag("TTWHChi2");
   float tag=TTWHChi2(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.Higgs_M());
   i.SetTag("TTWHChi2",tag);
   return tag;
 }
 float ReconstructionQuality::TTWBBChi2(Interpretation& i){
+  if(i.HasTag("TTWBBChi2")) return i.GetTag("TTWBBChi2");
   float tag=TTWBBChi2(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.Higgs_M());
   i.SetTag("TTWBBChi2",tag);
   return tag;
 }
 
 float ReconstructionQuality::TTWChi2(Interpretation& i){
+  if(i.HasTag("TTWChi2")) return i.GetTag("TTWChi2");
   float tag=TTWChi2(i.TopHad_M(),i.TopLep_M(),i.WHad_M());
   i.SetTag("TTWChi2",tag);
   return tag;
@@ -204,35 +213,41 @@ float ReconstructionQuality::TTWChi2(Interpretation& i){
 
 
 float ReconstructionQuality::TTWHishLikelihood(Interpretation& i){
+  if(i.HasTag("TTWHishLikelihood")) return i.GetTag("TTWHishLikelihood");
   float tag=TTWHishLikelihood(i.TopHad_M(),i.TopLep_M(),i.WHad_M(),i.Higgs_M());
   i.SetTag("TTWHishLikelihood",tag);
   return tag;
 }
 float ReconstructionQuality::TTWishLikelihood(Interpretation& i){
+  if(i.HasTag("TTWishLikelihood")) return i.GetTag("TTWishLikelihood");
   float tag=TTWishLikelihood(i.TopHad_M(),i.TopLep_M(),i.WHad_M());
   i.SetTag("TTWishLikelihood",tag);
   return tag;
 }
 
 float ReconstructionQuality::TTH_ME(Interpretation& i){
-  float tag=me.GetTTHMEsq(i.TopHad(),i.TopLep(),i.Higgs());
+  if(i.HasTag("TTH_ME")) return i.GetTag("TTH_ME");
+  float tag=1e4*me.GetTTHMEsq(i.TopHad(),i.TopLep(),i.Higgs());
   i.SetTag("TTH_ME",tag);
   return tag;
 }
 
 float ReconstructionQuality::TTBB_ON_ME(Interpretation& i){
-  float tag=100*me.GetTTBBMEsq_onshell(i.TopHad(),i.TopLep(),i.B1(),i.B2());
+  if(i.HasTag("TTBB_ON_ME")) return i.GetTag("TTBB_ON_ME");
+  float tag=1e4*me.GetTTBBMEsq_onshell(i.TopHad(),i.TopLep(),i.B1(),i.B2());
   i.SetTag("TTBB_ON_ME",tag);
   return tag;
 }
 float ReconstructionQuality::TTBB_OFF_ME(Interpretation& i){
-  float tag=100*me.GetTTBBMEsq_offshell(i.TopHad(),i.TopLep(),i.B1(),i.B2());
+  if(i.HasTag("TTBB_OFF_ME")) return i.GetTag("TTBB_OFF_ME");
+  float tag=1e4*me.GetTTBBMEsq_offshell(i.TopHad(),i.TopLep(),i.B1(),i.B2());
   i.SetTag("TTBB_OFF_ME",tag);
   return tag;
 }
 
 
 float ReconstructionQuality::TTHBB_ME(Interpretation& i){
+  if(i.HasTag("TTHBB_ME")) return i.GetTag("TTHBB_ME");
   float tag=me.GetTTHBBMEsq(i.TopHad(),i.TopLep(),i.B1(),i.B2());
   i.SetTag("TTHBB_ME",tag);
   return tag;

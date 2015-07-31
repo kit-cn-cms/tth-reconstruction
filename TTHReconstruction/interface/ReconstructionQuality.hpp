@@ -16,30 +16,19 @@ public:
 
   float GetTag(std::string tag, Interpretation& i);
   // get chi2 containing 3 (4) terms: hadronic top-mass, leptonic top-mass, W-mass (, Higgs/BB-mass)
-  float TTWHChi2(float mthad, float mtlep, float mhiggs, float mwhad);
-  float TTWBBChi2(float mthad, float mtlep, float mhiggs, float mwhad);
-  float TTWChi2(float mthad, float mtlep, float mwhad);
   float TTWHChi2(Interpretation& i);
   float TTWBBChi2(Interpretation& i);
   float TTWChi2(Interpretation& i);
 
   // get likelihood for the masses of hadronic top, leptonic top, W (, Higgs/BB-mass) for a perfectly reconstructed tth-interpreatation
-  float TTWHLikelihood(float mthad, float mtlep, float mhiggs, float mwhad);
-  float TTWBBLikelihood(float mthad, float mtlep, float mhiggs, float mwhad);
-  float TTWLikelihood(float mthad, float mtlep, float mwhad);
   float TTWHLikelihood(Interpretation& i);
   float TTWBBLikelihood(Interpretation& i);
   float TTWLikelihood(Interpretation& i);
   // get likelihood for the masses of hadronic top, leptonic top, W (and Higgs/BB-mass) for combinatoric background
-  float TTWHLikelihood_comb(float mthad, float mtlep, float mhiggs, float mwhad);
-  float TTWBBLikelihood_comb(float mthad, float mtlep, float mhiggs, float mwhad);
-  float TTWLikelihood_comb(float mthad, float mtlep, float mwhad);
   float TTWHLikelihood_comb(Interpretation& i);
   float TTWBBLikelihood_comb(Interpretation& i);
   float TTWLikelihood_comb(Interpretation& i);
   // get likelihood for the masses of hadronic top, leptonic top, W (and Higgs/BB-mass) for the best possible interpretation
-  float TTWHishLikelihood(float mthad, float mtlep, float mhiggs, float mwhad);
-  float TTWishLikelihood(float mthad, float mtlep, float mwhad);
   float TTWHishLikelihood(Interpretation& i);
   float TTWishLikelihood(Interpretation& i);
 
@@ -76,6 +65,22 @@ public:
 
  
 private:
+  float TTWHChi2(float mthad, float mtlep, float mhiggs, float mwhad);
+  float TTWBBChi2(float mthad, float mtlep, float mhiggs, float mwhad);
+  float TTWChi2(float mthad, float mtlep, float mwhad);
+
+  float TTWHLikelihood(float mthad, float mtlep, float mhiggs, float mwhad);
+  float TTWBBLikelihood(float mthad, float mtlep, float mhiggs, float mwhad);
+  float TTWLikelihood(float mthad, float mtlep, float mwhad);
+
+  float TTWHLikelihood_comb(float mthad, float mtlep, float mhiggs, float mwhad);
+  float TTWBBLikelihood_comb(float mthad, float mtlep, float mhiggs, float mwhad);
+  float TTWLikelihood_comb(float mthad, float mtlep, float mwhad);
+
+  float TTWHishLikelihood(float mthad, float mtlep, float mhiggs, float mwhad);
+  float TTWishLikelihood(float mthad, float mtlep, float mwhad);
+
+
   TFile* file;
   TH1F* h_CSV_b;
   TH1F* h_CSV_l_w_c;
