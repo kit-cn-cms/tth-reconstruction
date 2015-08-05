@@ -58,8 +58,8 @@ Analyzer::Analyzer(string outfilename):generator(InterpretationGenerator(IntType
   h_best_mcmatched_ttbb_me=new TH1F("best_mcmatched_ttbb_me","best_mcmatched_ttbb_me",40,-4.5,-1.5);
   h_best_mcmatched_ratio_me=new TH1F("best_mcmatched_ratio_me","best_mcmatched_ratio_me",26,-0.1,1);
 
-  h_mcmatched_tth_me_vs_cme=new TH2F("mcmatched_tth_me_vs_cme","mcmatched_tth_me_vs_cme",20,-6.5,-2.5,20,500,2500);
-  h_mcmatched_ttbb_me_vs_cme=new TH2F("mcmatched_ttbb_me_vs_cme","mcmatched_ttbb_me_vs_cme",20,-4.5,-1.5,20,500,2500);
+  h_mcmatched_tth_me_vs_cme=new TH2F("mcmatched_tth_me_vs_cme","mcmatched_tth_me_vs_cme",40,-5,-2.5,40,500,2500);
+  h_mcmatched_ttbb_me_vs_cme=new TH2F("mcmatched_ttbb_me_vs_cme","mcmatched_ttbb_me_vs_cme",40,-4.5,-2,40,500,2500);
 
   h_mcmatched_sum_tth_me=new TH1F("mcmatched_sum_tth_me","mcmatched_sum_tth_me",40,-3,1);
   h_mcmatched_sum_ttbb_me=new TH1F("mcmatched_sum_ttbb_me","mcmatched_sum_ttbb_me",40,-3,1);
@@ -84,6 +84,9 @@ Analyzer::Analyzer(string outfilename):generator(InterpretationGenerator(IntType
   h_perfect_tth_me=new TH1F("perfect_tth_me","perfect_tth_me",40,-7,-2);
   h_perfect_ttbb_me=new TH1F("perfect_ttbb_me","perfect_ttbb_me",40,-5,-1);
   h_perfect_ratio_me=new TH1F("perfect_ratio_me","perfect_ratio_me",26,-0.1,1);
+
+  h_perfect_tth_nd_me=new TH1F("perfect_tth_nd_me","perfect_tth_nd_me",40,-4,0);
+  h_perfect_ttbb_off_me=new TH1F("perfect_ttbb_off_me","perfect_ttbb_off_me",40,-6,0);
 
 
 }
@@ -164,6 +167,8 @@ Analyzer::~Analyzer(){
   h_HT->Write();
   h_mass->Write();
 
+  h_perfect_tth_nd_me->Write();
+  h_perfect_ttbb_off_me->Write();
 
   outfile->Close();
 }
@@ -432,7 +437,9 @@ void Analyzer::Analyze(const std::vector<TLorentzVector>& jetvecs, const std::ve
   }
   if(perfect_int!=0){
     h_perfect_tth_me->Fill(log10(quality.TTHBB_ME(*perfect_int)));
+    h_perfect_tth_nd_me->Fill(log10(quality.TTH_ME(*perfect_int)));
     h_perfect_ttbb_me->Fill(log10(quality.TTBB_ON_ME(*perfect_int)));
+    h_perfect_ttbb_off_me->Fill(log10(quality.TTBB_OFF_ME(*perfect_int)));
     h_perfect_ratio_me->Fill(quality.TTHBB_ME(*perfect_int)/(quality.TTBB_ON_ME(*perfect_int)+quality.TTHBB_ME(*perfect_int)));
   }
 
