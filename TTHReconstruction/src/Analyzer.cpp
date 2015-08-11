@@ -29,6 +29,9 @@ Analyzer::Analyzer(string outfilename):generator(InterpretationGenerator(IntType
   h_best_tth_me=new TH1F("best_tth_me","best_tth_me",40,-4,-2);
   h_best_ttbb_me=new TH1F("best_ttbb_me","best_ttbb_me",40,-4,-.5);
   h_best_ratio_me=new TH1F("best_ratio_me","best_ratio_me",26,-0.1,1);
+  h_best_toptag=new TH1F("best_toptag","best_toptag",100,0,0);
+  h_best_toptag_matchableW=new TH1F("best_toptag_matchableW","best_toptag_matchableW",100,0,0);
+  h_best_toptag_other=new TH1F("best_toptag_other","best_toptag_other",100,0,0);
   h_tth_me_best_tth_likelihood=new TH1F("tth_me_best_tth_likelihood","tth_me_best_tth_likelihood",40,-6,-2);
   h_ttbb_me_best_ttbb_likelihood=new TH1F("ttbb_me_best_ttbb_likelihood","ttbb_me_best_ttbb_likelihood",40,-4.5,-.5);
   h_ratio_me_best_likelihood=new TH1F("ratio_me_best_likelihood","ratio_me_best_likelihood",26,-0.1,1);
@@ -70,6 +73,11 @@ Analyzer::Analyzer(string outfilename):generator(InterpretationGenerator(IntType
   h_mcmatched_sum_tth_me_likelihood=new TH1F("mcmatched_sum_tth_me_likelihood","mcmatched_sum_tth_me_likelihood",40,-18,-8);
   h_mcmatched_sum_ttbb_me_likelihood=new TH1F("mcmatched_sum_ttbb_me_likelihood","mcmatched_sum_ttbb_me_likelihood",40,-16,-6);
   h_mcmatched_sum_ratio_me_likelihood=new TH1F("mcmatched_sum_ratio_me_likelihood","mcmatched_sum_ratio_me_likelihood",26,-.1,1);
+  h_mcmatched_m_higgs_best_tt_likelihood=new TH1F("mcmatched_m_higgs_best_likelihood","mcmatched_m_higgs_best_likelihood",60,0,300);
+
+  h_mcmatched_best_ratio_me_likelihood=new TH1F("best_ratio_me_likelihood","best_ratio_me_likelihood",26,-0.1,1);
+  h_mcmatched_best_ratio_likelihood=new TH1F("best_ratio_likelihood","best_ratio_likelihood",26,-0.1,1);
+  h_mcmatched_best_ratio_me=new TH1F("best_ratio_me","best_ratio_me",26,-0.1,1);
 
   h_mcmatched_tth_me_likelihood=new TH1F("mcmatched_tth_me_likelihood","mcmatched_tth_me_likelihood",40,-18,-6);
   h_mcmatched_ttbb_me_likelihood=new TH1F("mcmatched_ttbb_me_likelihood","mcmatched_ttbb_me_likelihood",40,-18,-6);
@@ -99,6 +107,9 @@ Analyzer::~Analyzer(){
 
   outfile->cd();
   // write histos
+  h_best_toptag->Write();
+  h_best_toptag_matchableW->Write();
+  h_best_toptag_other->Write();
   h_best_tth_me_likelihood->Write();
   h_best_ttbb_me_likelihood->Write();
   h_best_ratio_me_likelihood->Write();
@@ -144,6 +155,9 @@ Analyzer::~Analyzer(){
   h_best_mcmatched_ratio_likelihood->Write();
   h_mcmatched_tth_me_vs_cme->Write();
   h_mcmatched_ttbb_me_vs_cme->Write();
+  h_mcmatched_tth_me_likelihood->Write();
+  h_mcmatched_ttbb_me_likelihood->Write();
+  h_mcmatched_ratio_me_likelihood->Write();
 
   h_mcmatched_sum_tth_me->Write();
   h_mcmatched_sum_ttbb_me->Write();
@@ -155,9 +169,10 @@ Analyzer::~Analyzer(){
   h_mcmatched_sum_ttbb_me_likelihood->Write();
   h_mcmatched_sum_ratio_me_likelihood->Write();
 
-  h_mcmatched_tth_me_likelihood->Write();
-  h_mcmatched_ttbb_me_likelihood->Write();
-  h_mcmatched_ratio_me_likelihood->Write();
+  h_mcmatched_m_higgs_best_tt_likelihood->Write();
+  h_mcmatched_best_ratio_likelihood->Write();
+  h_mcmatched_best_ratio_me_likelihood->Write();
+  h_mcmatched_best_ratio_me->Write();
 
   h_njets->Write();
   h_ntags->Write();
@@ -213,7 +228,14 @@ void Analyzer::Analyze(const std::vector<TLorentzVector>& jetvecs, const std::ve
   double sum_ttbb_me=0;
 
   // loop over all interpretations
+  float best_toptag=-1;
+  bool matchableW=false;
   for(uint i=0;i<ints.size();i++){
+    float toptag=quality.TopHadLikelihood(ints[i]->TopHad_M())*quality.WHadLikelihood(ints[i]->WHad_M());
+    if(toptag>best_toptag){
+      best_toptag=toptag;
+    }
+    if(mcmatcher.MatchWHad(*ints[i])) matchableW=true;
     float tthlike= quality.TTWHLikelihood(*ints[i]);
     float ttbblike= quality.TTWBBLikelihood(*ints[i]);
     float ttlike= quality.TTWLikelihood(*ints[i]);
@@ -252,6 +274,13 @@ void Analyzer::Analyze(const std::vector<TLorentzVector>& jetvecs, const std::ve
     sum_tth_likelihood+=tthlike;
     sum_ttbb_likelihood+=ttbblike;
   }
+
+  h_best_toptag->Fill(best_toptag);
+  if(matchableW)
+    h_best_toptag_matchableW->Fill(best_toptag);
+  else
+    h_best_toptag_other->Fill(best_toptag);
+  
   tth_me_best_tth_likelihood=quality.TTHBB_ME(*best_int_tth_likelihood);
   // scale ttbb ME up  -- at 125 GeV ttH has larger cross section
   ttbb_me_best_ttbb_likelihood=quality.TTBB_ON_ME(*best_int_ttbb_likelihood);
@@ -397,29 +426,21 @@ void Analyzer::Analyze(const std::vector<TLorentzVector>& jetvecs, const std::ve
     h_mcmatched_ttbb_me_likelihood->Fill(log10(melikettbb));
     h_mcmatched_ratio_me_likelihood->Fill(meliketth/(meliketth+melikettbb));
     
-    float sum_meliketth=0;
-    float sum_melikettbb=0;
-    float sum_liketth=0;
-    float sum_likettbb=0;
-    float sum_metth=0;
-    float sum_mettbb=0;
-    for(uint i=0;i<ints.size();i++){
-      sum_meliketth+=quality.TTWHLikelihood(*(ints[i]))*quality.TTHBB_ME(*(ints[i]));
-      sum_melikettbb+=quality.TTWBBLikelihood(*(ints[i]))*quality.TTBB_ON_ME(*(ints[i]));
-      sum_liketth+=quality.TTWHLikelihood(*(ints[i]));
-      sum_likettbb+=quality.TTWBBLikelihood(*(ints[i]));
-      sum_metth+=quality.TTHBB_ME(*(ints[i]));
-      sum_mettbb+=quality.TTBB_ON_ME(*(ints[i]));
-    }
-    h_mcmatched_sum_tth_me->Fill(log10(sum_metth));
-    h_mcmatched_sum_ttbb_me->Fill(log10(sum_mettbb));
-    h_mcmatched_sum_ratio_me->Fill(sum_metth/(sum_metth+sum_mettbb));
-    h_mcmatched_sum_tth_likelihood->Fill(log10(sum_liketth));
-    h_mcmatched_sum_ttbb_likelihood->Fill(log10(sum_likettbb));
-    h_mcmatched_sum_ratio_likelihood->Fill(sum_liketth/(sum_liketth+sum_likettbb));
-    h_mcmatched_sum_tth_me_likelihood->Fill(log10(sum_meliketth));
-    h_mcmatched_sum_ttbb_me_likelihood->Fill(log10(sum_melikettbb));
-    h_mcmatched_sum_ratio_me_likelihood->Fill(sum_meliketth/(sum_meliketth+sum_melikettbb));
+
+    // mc matching just for event selection
+    h_mcmatched_m_higgs_best_tt_likelihood->Fill(best_int_tt_likelihood!=0?best_int_tt_likelihood->Higgs_M():1);
+    h_mcmatched_best_ratio_likelihood->Fill(best_ratio_likelihood);
+    h_mcmatched_best_ratio_me_likelihood->Fill(best_ratio_me_likelihood);
+    h_mcmatched_best_ratio_me->Fill(best_ratio_me);
+    h_mcmatched_sum_tth_me_likelihood->Fill(sum_tth_me_likelihood>0?log10(sum_tth_me_likelihood):-1e20);
+    h_mcmatched_sum_ttbb_me_likelihood->Fill(sum_ttbb_me_likelihood>0?log10(sum_ttbb_me_likelihood):-1e20);
+    h_mcmatched_sum_ratio_me_likelihood->Fill(sum_ratio_me_likelihood);
+    h_mcmatched_sum_tth_likelihood->Fill(sum_tth_likelihood>0?log10(sum_tth_likelihood):-1e20);
+    h_mcmatched_sum_ttbb_likelihood->Fill(sum_ttbb_likelihood>0?log10(sum_ttbb_likelihood):-1e20);
+    h_mcmatched_sum_ratio_likelihood->Fill(sum_ratio_likelihood);
+    h_mcmatched_sum_tth_me->Fill(sum_tth_me>0?log10(sum_tth_me):-1e20);
+    h_mcmatched_sum_ttbb_me->Fill(sum_ttbb_me>0?log10(sum_ttbb_me):-1e20);
+    h_mcmatched_sum_ratio_me->Fill(sum_ratio_me);
 
   }
   if(best_int!=0){

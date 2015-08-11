@@ -35,6 +35,10 @@ private:
   int nmatched_tt2;
   int nmatched_ttbb2;
 
+  TH1F* h_best_toptag;
+  TH1F* h_best_toptag_matchableW;
+  TH1F* h_best_toptag_other;
+
   TH1F* h_best_tth_me_likelihood;
   TH1F* h_best_ttbb_me_likelihood;
   TH1F* h_best_ratio_me_likelihood;
@@ -92,6 +96,10 @@ private:
   TH1F* h_mcmatched_sum_ttbb_me_likelihood;
   TH1F* h_mcmatched_sum_ratio_me_likelihood;
 
+  TH1F* h_mcmatched_m_higgs_best_tt_likelihood;
+  TH1F* h_mcmatched_best_ratio_likelihood;
+  TH1F* h_mcmatched_best_ratio_me_likelihood;
+  TH1F* h_mcmatched_best_ratio_me;        
   TH2F* h_mcmatched_tth_me_vs_cme;
   TH2F* h_mcmatched_ttbb_me_vs_cme;
 
