@@ -4,6 +4,7 @@
 #include "TFile.h"
 #include "TLorentzVector.h"
 #include "Interpretation.hpp"
+#include "InterpretationGenerator.hpp"
 #include "MECalculator.hpp"
 #include "TH1F.h"
 #include "TMath.h"
@@ -35,7 +36,7 @@ public:
   // get the b-tagger likelihoods
   float BLikelihood(float csv);
   float LLikelihood(float csv);
-  float NBLikelihood(uint ntagged, uint njets, float* csvs);
+  float NBLikelihood(uint ntagged, uint njets, const float* csvs);
 
   // get likelihoods for different masses
   float TopHadLikelihood(float m);

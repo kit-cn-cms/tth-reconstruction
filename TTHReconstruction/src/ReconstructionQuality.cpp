@@ -29,7 +29,7 @@ ReconstructionQuality::ReconstructionQuality(string filename){
   tophad_sigma=17;
   toplep_sigma=26;
   whad_sigma=10;
-  tiny_likelihood=1e-4;
+  tiny_likelihood=1e-6;
   bb_slope=0.0128;
 }
 
@@ -335,28 +335,22 @@ float ReconstructionQuality::Interpolate(TH1F* histo, float value){
   return fmax(histo->Interpolate(value),tiny_likelihood);
 }
 
-float ReconstructionQuality::NBLikelihood(uint ntagged, uint njets, float* csvs){
+float ReconstructionQuality::NBLikelihood(uint ntagged, uint njets,const float* csvs){
   if(njets<ntagged) return 0;
   double llh=0.; // total likelihood
-  uint binary=pow(2,ntagged)-1; //e.g.2^4-1=15=00001111, only last 4 tagged
-  uint lastcomb=binary*pow(2,(njets-ntagged)); //e.g. 11110000, only first 4 tagged
-  while(binary<=lastcomb){
+  vector<int> idxs(njets);
+  for(int i=0;i<njets;i++){
+    idxs[i]=i;
+  }
+  do{
     double l=1; //likelihood of current combination
-    uint b=binary; //used to copute nth digit in binary
-    for(uint ijet=0; ijet<njets;ijet++){
-      if(b%2==1){
-	l*=BLikelihood(csvs[ijet]);
-      }
-      else{
-	l*=LLikelihood(csvs[ijet]);
-      }
-      b=b/2;
+    for(uint i=0; i<ntagged;i++){
+      l*=BLikelihood(csvs[idxs[i]]);
     }
-    llh+=l;
-    // get next permutation: 00001111 -> 00010111
-    uint t = (binary | (binary - 1)) + 1;  
-      binary = t | ((((t & -t) / (binary & -binary)) >> 1) - 1);  
-      
-  }   
+    for(uint i=ntagged; i<njets;i++){
+      l*=LLikelihood(csvs[idxs[i]]);
+    }
+    llh+=l;     
+  }while(next_combination(idxs.begin(), idxs.begin()+ntagged, idxs.end()));
   return llh;
 }
