@@ -1,3 +1,6 @@
+#ifndef read_slha_H
+#define read_slha_H
+
 #include <map>
 #include <string>
 #include <sstream>
@@ -42,3 +45,4 @@ class SLHAReader
     map<string, SLHABlock> _blocks;
 };
 
+#endif

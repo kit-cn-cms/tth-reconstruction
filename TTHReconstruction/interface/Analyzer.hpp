@@ -74,6 +74,9 @@ private:
   TH1F* h_best_mcmatched_ttbb_me;
   TH1F* h_best_mcmatched_ratio_me;
   TH1F* h_perfect_tth_me;
+  TH1F* h_perfect_tth_ps_me;
+  TH1F* h_perfect_tth_sc_me;
+  TH1F* h_perfect_tth_ratio_me;
   TH1F* h_perfect_ttbb_off_me;
   TH1F* h_perfect_tth_nd_me;
   TH1F* h_perfect_ttbb_me;

@@ -90,6 +90,9 @@ Analyzer::Analyzer(string outfilename):generator(InterpretationGenerator(IntType
   h_best_mcmatched_ratio_likelihood=new TH1F("best_mcmatched_ratio_likelihood","best_mcmatched_ratio_likelihood",26,-0.1,1);
 
   h_perfect_tth_me=new TH1F("perfect_tth_me","perfect_tth_me",40,-7,-2);
+  h_perfect_tth_ps_me=new TH1F("perfect_tth_ps_me","perfect_tth_ps_me",40,-7,-2);
+  h_perfect_tth_sc_me=new TH1F("perfect_tth_sc_me","perfect_tth_sc_me",40,-7,-2);
+  h_perfect_tth_ratio_me=new TH1F("perfect_tth_ratio_me","perfect_tth_ratio_me",26,-0.1,1.1);
   h_perfect_ttbb_me=new TH1F("perfect_ttbb_me","perfect_ttbb_me",40,-5,-1);
   h_perfect_ratio_me=new TH1F("perfect_ratio_me","perfect_ratio_me",26,-0.1,1);
 
@@ -150,6 +153,11 @@ Analyzer::~Analyzer(){
   h_perfect_tth_me->Write();
   h_perfect_ttbb_me->Write();
   h_perfect_ratio_me->Write();
+
+  h_perfect_tth_sc_me->Write();
+  h_perfect_tth_ps_me->Write();
+  h_perfect_tth_ratio_me->Write();
+
   h_mcmatched_tth_likelihood->Write();
   h_mcmatched_ttbb_likelihood->Write();
   h_mcmatched_ratio_likelihood->Write();
@@ -286,9 +294,9 @@ void Analyzer::Analyze(const std::vector<TLorentzVector>& jetvecs, const std::ve
   else
     h_best_toptag_other->Fill(best_toptag);
   
-  tth_me_best_tth_likelihood=quality.TTHBB_ME(*best_int_tth_likelihood);
+  if(best_int_tth_likelihood!=0) tth_me_best_tth_likelihood=quality.TTHBB_ME(*best_int_tth_likelihood);
   // scale ttbb ME up  -- at 125 GeV ttH has larger cross section
-  ttbb_me_best_ttbb_likelihood=quality.TTBB_ON_ME(*best_int_ttbb_likelihood);
+  if(best_int_ttbb_likelihood!=0) ttbb_me_best_ttbb_likelihood=quality.TTBB_ON_ME(*best_int_ttbb_likelihood);
 
   // loop over selected interpretations
   for(uint i=0;i<ints.size();i++){
@@ -414,7 +422,7 @@ void Analyzer::Analyze(const std::vector<TLorentzVector>& jetvecs, const std::ve
       best_int=ints[i];
     }
   }
-  if(mcmatcher.MatchTTHallQ(*best_int)) reco_int=best_int;
+  if(best_int!=0&&mcmatcher.MatchTTHallQ(*best_int)) reco_int=best_int;
   if(reco_int!=0){
     h_mcmatched_tth_me->Fill(log10(quality.TTHBB_ME(*reco_int)));
     h_mcmatched_ttbb_me->Fill(log10(quality.TTBB_ON_ME(*reco_int)));
@@ -462,6 +470,10 @@ void Analyzer::Analyze(const std::vector<TLorentzVector>& jetvecs, const std::ve
     h_perfect_ttbb_me->Fill(log10(quality.TTBB_ON_ME(*perfect_int)));
     h_perfect_ttbb_off_me->Fill(log10(quality.TTBB_OFF_ME(*perfect_int)));
     h_perfect_ratio_me->Fill(quality.TTHBB_ME(*perfect_int)/(quality.TTBB_ON_ME(*perfect_int)+quality.TTHBB_ME(*perfect_int)));
+
+    h_perfect_tth_ps_me->Fill(log10(quality.TTX0_PS_ME(*perfect_int)));
+    h_perfect_tth_sc_me->Fill(log10(quality.TTX0_SC_ME(*perfect_int)));
+    h_perfect_tth_ratio_me->Fill(quality.TTX0_SC_ME(*perfect_int)/(quality.TTX0_PS_ME(*perfect_int)+quality.TTX0_SC_ME(*perfect_int)));
   }
 
 

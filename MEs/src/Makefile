@@ -5,7 +5,7 @@ target=$(LIBDIR)/libmodel_sm.a
 
 all: $(target)
 
-objects=HelAmps_sm.o Parameters_sm.o rambo.o read_slha.o
+objects=HelAmps_sm.o Parameters_sm.o rambo.o read_slha.o HelAmps_HC_UFO.o Parameters_bsm.o
 
 $(target): $(objects)
 	$(AR) cru $@ $(objects)

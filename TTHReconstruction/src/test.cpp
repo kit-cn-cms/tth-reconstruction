@@ -11,7 +11,10 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include "PerfectAnalyzer.hpp"
 #include "Analyzer.hpp"
+#include "CouplingAnalyzer.hpp"
+#include "MCTruthAnalyzer.hpp"
 
 using namespace std;
 typedef vector<TLorentzVector> LVs;
@@ -176,7 +179,52 @@ void test(){
   float* AdditionalGenBJet_E = new float[20];
   chain->SetBranchAddress("AdditionalGenBJet_E",AdditionalGenBJet_E);
 
-  Analyzer ana(outfilename);
+  float BoostedTopHiggs_HiggsCandidate_Pt3;
+  chain->SetBranchAddress("BoostedTopHiggs_HiggsCandidate_Pt3",&BoostedTopHiggs_HiggsCandidate_Pt3);
+  float BoostedTopHiggs_HiggsCandidate_Eta3;
+  chain->SetBranchAddress("BoostedTopHiggs_HiggsCandidate_Eta3",&BoostedTopHiggs_HiggsCandidate_Eta3);
+  float BoostedTopHiggs_HiggsCandidate_Phi3;
+  chain->SetBranchAddress("BoostedTopHiggs_HiggsCandidate_Phi3",&BoostedTopHiggs_HiggsCandidate_Phi3);
+  float BoostedTopHiggs_HiggsCandidate_E3;
+  chain->SetBranchAddress("BoostedTopHiggs_HiggsCandidate_E3",&BoostedTopHiggs_HiggsCandidate_E3);
+
+  float BoostedTopHiggs_TopHadCandidate_B_Pt;
+  chain->SetBranchAddress("BoostedTopHiggs_TopHadCandidate_B_Pt",&BoostedTopHiggs_TopHadCandidate_B_Pt);
+  float BoostedTopHiggs_TopHadCandidate_B_Eta;
+  chain->SetBranchAddress("BoostedTopHiggs_TopHadCandidate_B_Eta",&BoostedTopHiggs_TopHadCandidate_B_Eta);
+  float BoostedTopHiggs_TopHadCandidate_B_Phi;
+  chain->SetBranchAddress("BoostedTopHiggs_TopHadCandidate_B_Phi",&BoostedTopHiggs_TopHadCandidate_B_Phi);
+  float BoostedTopHiggs_TopHadCandidate_B_E;
+  chain->SetBranchAddress("BoostedTopHiggs_TopHadCandidate_B_E",&BoostedTopHiggs_TopHadCandidate_B_E);
+
+  float BoostedTopHiggs_TopHadCandidate_W1_Pt;
+  chain->SetBranchAddress("BoostedTopHiggs_TopHadCandidate_W1_Pt",&BoostedTopHiggs_TopHadCandidate_W1_Pt);
+  float BoostedTopHiggs_TopHadCandidate_W1_Eta;
+  chain->SetBranchAddress("BoostedTopHiggs_TopHadCandidate_W1_Eta",&BoostedTopHiggs_TopHadCandidate_W1_Eta);
+  float BoostedTopHiggs_TopHadCandidate_W1_Phi;
+  chain->SetBranchAddress("BoostedTopHiggs_TopHadCandidate_W1_Phi",&BoostedTopHiggs_TopHadCandidate_W1_Phi);
+  float BoostedTopHiggs_TopHadCandidate_W1_E;
+  chain->SetBranchAddress("BoostedTopHiggs_TopHadCandidate_W1_E",&BoostedTopHiggs_TopHadCandidate_W1_E);
+
+  float BoostedTopHiggs_TopHadCandidate_W2_Pt;
+  chain->SetBranchAddress("BoostedTopHiggs_TopHadCandidate_W2_Pt",&BoostedTopHiggs_TopHadCandidate_W2_Pt);
+  float BoostedTopHiggs_TopHadCandidate_W2_Eta;
+  chain->SetBranchAddress("BoostedTopHiggs_TopHadCandidate_W2_Eta",&BoostedTopHiggs_TopHadCandidate_W2_Eta);
+  float BoostedTopHiggs_TopHadCandidate_W2_Phi;
+  chain->SetBranchAddress("BoostedTopHiggs_TopHadCandidate_W2_Phi",&BoostedTopHiggs_TopHadCandidate_W2_Phi);
+  float BoostedTopHiggs_TopHadCandidate_W2_E;
+  chain->SetBranchAddress("BoostedTopHiggs_TopHadCandidate_W2_E",&BoostedTopHiggs_TopHadCandidate_W2_E);
+
+  float BoostedTopHiggs_TopLepCandidate_B_Pt;
+  chain->SetBranchAddress("BoostedTopHiggs_TopLepCandidate_B_Pt",&BoostedTopHiggs_TopLepCandidate_B_Pt);
+  float BoostedTopHiggs_TopLepCandidate_B_Eta;
+  chain->SetBranchAddress("BoostedTopHiggs_TopLepCandidate_B_Eta",&BoostedTopHiggs_TopLepCandidate_B_Eta);
+  float BoostedTopHiggs_TopLepCandidate_B_Phi;
+  chain->SetBranchAddress("BoostedTopHiggs_TopLepCandidate_B_Phi",&BoostedTopHiggs_TopLepCandidate_B_Phi);
+  float BoostedTopHiggs_TopLepCandidate_B_E;
+  chain->SetBranchAddress("BoostedTopHiggs_TopLepCandidate_B_E",&BoostedTopHiggs_TopLepCandidate_B_E);
+
+  CouplingAnalyzer ana(outfilename);
 
   // loop
   long nentries = chain->GetEntries(); 
@@ -193,7 +241,7 @@ void test(){
     }
 
     chain->GetEntry(iEntry+skipevents); 
-    if(N_Jets<6||N_BTagsM<4) continue;
+    if(N_Jets<6||N_BTagsM!=3) continue;
     TLorentzVector vHiggs_true=getLV(GenHiggs_Pt,GenHiggs_Eta,GenHiggs_Phi);
     TLorentzVector vTopHad_true=getLV(GenTopHad_Pt[0],GenTopHad_Eta[0],GenTopHad_Phi[0]);
     TLorentzVector vTopLep_true=getLV(GenTopLep_Pt[0],GenTopLep_Eta[0],GenTopLep_Phi[0]);
@@ -209,10 +257,10 @@ void test(){
       vB1_true=getLV(GenHiggs_B1_Pt,GenHiggs_B1_Eta,GenHiggs_B1_Phi);
       vB2_true=getLV(GenHiggs_B2_Pt,GenHiggs_B2_Eta,GenHiggs_B2_Phi);
     }
-    else if(N_AdditionalGenBJets>=2){
+    /*    else if(N_AdditionalGenBJets>=2){
       vB1_true=getLV(AdditionalGenBJet_Pt[0],AdditionalGenBJet_Eta[0],AdditionalGenBJet_Phi[0],AdditionalGenBJet_E[0]);
       vB2_true=getLV(AdditionalGenBJet_Pt[1],AdditionalGenBJet_Eta[1],AdditionalGenBJet_Phi[1],AdditionalGenBJet_E[1]);
-    }
+      }*/
     else continue;
 
 
@@ -223,15 +271,25 @@ void test(){
     }
     LV lepvec = getLV(Evt_Pt_PrimaryLepton,Evt_Eta_PrimaryLepton,Evt_Phi_PrimaryLepton,Evt_E_PrimaryLepton);
     TVector2 metvec;
-    metvec.SetMagPhi(Evt_Pt_MET,Evt_Phi_MET);
+    metvec.SetMagPhi(Evt_Pt_MET,Evt_Phi_MET);    
     nselected++;
     if(nselected%100==0){
       cout << "selected events " << nselected << endl;
     }
+    LV vH_boosted=getLV(BoostedTopHiggs_HiggsCandidate_Pt3,BoostedTopHiggs_HiggsCandidate_Eta3,BoostedTopHiggs_HiggsCandidate_Phi3,BoostedTopHiggs_HiggsCandidate_E3);
 
+    LV vQ1_boosted=getLV(BoostedTopHiggs_TopHadCandidate_W1_Pt,BoostedTopHiggs_TopHadCandidate_W1_Eta,BoostedTopHiggs_TopHadCandidate_W1_Phi,BoostedTopHiggs_TopHadCandidate_W1_E);
+    LV vQ2_boosted=getLV(BoostedTopHiggs_TopHadCandidate_W2_Pt,BoostedTopHiggs_TopHadCandidate_W2_Eta,BoostedTopHiggs_TopHadCandidate_W2_Phi,BoostedTopHiggs_TopHadCandidate_W2_E);
+    LV vBHad_boosted=getLV(BoostedTopHiggs_TopHadCandidate_B_Pt,BoostedTopHiggs_TopHadCandidate_B_Eta,BoostedTopHiggs_TopHadCandidate_B_Phi,BoostedTopHiggs_TopHadCandidate_B_E);
+    LV vBLep_boosted=getLV(BoostedTopHiggs_TopLepCandidate_B_Pt,BoostedTopHiggs_TopLepCandidate_B_Eta,BoostedTopHiggs_TopLepCandidate_B_Phi,BoostedTopHiggs_TopLepCandidate_B_E);
+
+    
     ana.Analyze(jetvecs,jetcsvs,lepvec,metvec,
 		vBHad_true,vQ1_true,vQ2_true,vBLep_true,
-		vLep_true,vNu_true,vB1_true,vB2_true);
+		vLep_true,vNu_true,vB1_true,vB2_true,
+		vBHad_boosted,vQ1_boosted,vQ2_boosted,
+		vBLep_boosted,
+		vH_boosted);
   }
 
 }

@@ -6,11 +6,11 @@ ReconstructionQuality::ReconstructionQuality(string filename){
   file=TFile::Open(filename.c_str());
   h_CSV_b=(TH1F*)file->Get("CSV_b");
   h_CSV_l_w_c=(TH1F*)file->Get("CSV_l_w_c");
-  h_M_Higgs_reco=(TH1F*)file->Get("M_Higgs_reco");
-  h_M_BB_reco=(TH1F*)file->Get("M_BB_reco");
-  h_M_TopHad_reco=(TH1F*)file->Get("M_TopHad_reco");
-  h_M_TopLep_reco=(TH1F*)file->Get("M_TopLep_reco");
-  h_M_WHad_reco=(TH1F*)file->Get("M_WHad_reco");
+  h_M_Higgs_reco=(TH1F*)file->Get("M_Higgs_best");
+  h_M_BB_reco=(TH1F*)file->Get("M_BB_best");
+  h_M_TopHad_reco=(TH1F*)file->Get("M_TopHad_best");
+  h_M_TopLep_reco=(TH1F*)file->Get("M_TopLep_best");
+  h_M_WHad_reco=(TH1F*)file->Get("M_WHad_best");
   h_M_Higgs_best=(TH1F*)file->Get("M_Higgs_best");
   h_M_TopHad_best=(TH1F*)file->Get("M_TopHad_best");
   h_M_TopLep_best=(TH1F*)file->Get("M_TopLep_best");
@@ -50,6 +50,8 @@ float ReconstructionQuality::GetTag(std::string tag, Interpretation& i){
   else if(tag=="TTWHishLikelihood") return TTWHishLikelihood(i);
   else if(tag=="TTWishLikelihood") return TTWishLikelihood(i);
 
+  else if(tag=="TTX0_SC_ME") return TTX0_SC_ME(i);
+  else if(tag=="TTX0_PS_ME") return TTX0_PS_ME(i);
   else if(tag=="TTH_ME") return TTH_ME(i);
   else if(tag=="TTHBB_ME") return TTHBB_ME(i);
   else if(tag=="TTBB_ON_ME") return TTBB_ON_ME(i);
@@ -232,6 +234,34 @@ float ReconstructionQuality::TTH_ME(Interpretation& i){
   return tag;
 }
 
+float ReconstructionQuality::TTX0_PS_ME(Interpretation& i){
+  if(i.HasTag("TTX0_PS_ME")) return i.GetTag("TTX0_PS_ME");
+  float tag=2.5*me.GetTTX0MEsq(i.TopHad(),i.TopLep(),i.Higgs(),true);
+  i.SetTag("TTX0_PS_ME",tag);
+  return tag;
+}
+
+float ReconstructionQuality::TTX0_SC_ME(Interpretation& i){
+  if(i.HasTag("TTX0_SC_ME")) return i.GetTag("TTX0_SC_ME");
+  float tag=me.GetTTX0MEsq(i.TopHad(),i.TopLep(),i.Higgs(),false);
+  i.SetTag("TTX0_SC_ME",tag);
+  return tag;
+}
+
+float ReconstructionQuality::TTX0_PS_ME_PDF(Interpretation& i){
+  if(i.HasTag("TTX0_PS_ME_PDF")) return i.GetTag("TTX0_PS_ME_PDF");
+  float tag=2.5*me.GetTTX0MEsqWpdf(i.TopHad(),i.TopLep(),i.Higgs(),true);
+  i.SetTag("TTX0_PS_ME_PDF",tag);
+  return tag;
+}
+
+float ReconstructionQuality::TTX0_SC_ME_PDF(Interpretation& i){
+  if(i.HasTag("TTX0_SC_ME_PDF")) return i.GetTag("TTX0_SC_ME_PDF");
+  float tag=me.GetTTX0MEsqWpdf(i.TopHad(),i.TopLep(),i.Higgs(),false);
+  i.SetTag("TTX0_SC_ME_PDF",tag);
+  return tag;
+}
+
 float ReconstructionQuality::TTBB_ON_ME(Interpretation& i){
   if(i.HasTag("TTBB_ON_ME")) return i.GetTag("TTBB_ON_ME");
   float tag=1e4*me.GetTTBBMEsq_onshell(i.TopHad(),i.TopLep(),i.B1(),i.B2());
@@ -312,12 +342,13 @@ float ReconstructionQuality::HiggsLikelihood_comb(float m){
   return llh;
 }
 float ReconstructionQuality::BBLikelihood(float m){
+  return 1;//llh;
   float llh= Interpolate(h_M_BB_reco,m);
-  return llh;
+
 }
 float ReconstructionQuality::BBLikelihood_comb(float m){
+  return 1;
   float llh= Interpolate(h_M_BB_all,m);
-  return llh;
 }
 
 float ReconstructionQuality::HiggsishLikelihood(float m){

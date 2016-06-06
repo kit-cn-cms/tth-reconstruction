@@ -61,6 +61,12 @@ public:
   // ttbb me, scaling bb-mass to 125 GeV
   float TTBB_ON_ME(Interpretation& i);
   float TTHBB_ME(Interpretation& i);
+
+  float TTX0_SC_ME(Interpretation& i);
+  float TTX0_PS_ME(Interpretation& i);
+
+  float TTX0_SC_ME_PDF(Interpretation& i);
+  float TTX0_PS_ME_PDF(Interpretation& i);
   
   float Interpolate(TH1F* histo, float value);
 

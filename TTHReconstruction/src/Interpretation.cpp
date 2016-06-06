@@ -71,6 +71,9 @@ TLorentzVector Interpretation::TopHad(){
 TLorentzVector Interpretation::WHad(){
   return w_had;
 }
+TLorentzVector Interpretation::WLep(){
+  return w_lep;
+}
 TLorentzVector Interpretation::TopLep(){
   return t_lep;
 }
